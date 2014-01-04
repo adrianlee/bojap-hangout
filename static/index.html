@@ -13,89 +13,133 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
     <!--[if IE]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+        <![endif]-->
 
     <script type="text/javascript" src="https://apis.google.com/js/platform.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+
 </head>
 
-<body id="home">
-	<div class="pure-g-r" id="layout">
-	    <div class="sidebar pure-u">
-	        <header class="header">
-	            <hgroup>
-	                <h1 class="brand-title">Bojap</h1>
-	                <h2 class="brand-tagline">Get help from tutors and study with others</h2>
-	            </hgroup>
+    <body id="home">
+        <div class="pure-g-r" id="layout">
+            <div class="sidebar pure-u">
+                <header class="header">
+                    <hgroup>
+                        <h1 class="brand-title">Bojap</h1>
+                        <h2 class="brand-tagline">Get help from tutors and study with others</h2>
+                    </hgroup>
 
-	            <nav class="nav">
-	                <ul class="nav-list">
-	                    <li class="nav-item">
-	                        <a class="pure-button" href="#tutoring">Tutoring</a>
-	                    </li>
-	                    <li class="nav-item">
-	                        <a class="pure-button" href="#studygroup">Study Group</a>
-	                    </li>
-	                </ul>
-	            </nav>
-	        </header>
-	    </div>
+                    <nav class="nav">
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a class="pure-button" href="#tutoring">Tutoring</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="pure-button" href="#studygroup">Study Group</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </header>
+            </div>
 
-	    <div class="pure-u-1">
-			<div class="content">
-				<div class="pure-g-r">
-				    <div class="pure-u-1">
+            <div class="pure-u-1">
+                <div class="content">
+                    <div class="pure-g-r">
+                        <div class="pure-u-1">
 
-				    <div class="content-subhead">Rooms</div>
+                            <div class="content-subhead">Create a room</div>
+                            <p>
+                                <form class="pure-form pure-form-aligned">
+                                    <fieldset>
+                                        <div class="pure-control-group">
+                                            <label for="subject">Topic</label>
+                                            <input id="subject" type="text" placeholder="Math 101">
+                                        </div>
 
-				    <!-- TABLE -->
-				    	<p></p>
-					    <table class="pure-table pure-table-horizontal">
-						    <thead>
-						        <tr>
-						            <th>Tutor</th>
-						            <th>Subject</th>
-						            <th>Join</th>
-						            <th>Participants</th>
-						        </tr>
-						    </thead>
+                                        <div class="pure-control-group">
+                                            <label for="size">Max. Participants</label>
+                                            <select id="size">
+                                                <option>2</option>
+                                                <option>3</option>
+                                                <option>4</option>
+                                                <option>5</option>
+                                                <option>6</option>
+                                                <option>7</option>
+                                                <option selected="selected">8</option>
+                                                <option>9</option>
+                                                <option>10</option>
+                                            </select>
+                                        </div>
 
-						    <tbody>
-						        <tr>
-						            <td>Adrian</td>
-						            <td>F1-5 English</td>
-						            <td><div id="placeholder-div3"></div></td>
-						            <td>Cecilia, Jessie</td>
-						        </tr>
-						    </tbody>
-						</table>
+                                        <div class="pure-controls">
+                                            <a id="create" type="submit" class="pure-button pure-button-primary">Start Hangout</a>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                                <div id="start_container" >
+                                    <div id="start_hangout"></div>
+                                </div>
+                            </p>
 
+                            <div class="content-subhead">Rooms</div>
+                            <p>
+                                <table class="pure-table pure-table-horizontal">
+                                    <thead>
+                                        <tr>
+                                            <th>Tutor</th>
+                                            <th>Subject</th>
+                                            <th>Participants</th>
+                                            <th>Status</th>
+                                            <th>URL</th>
+                                        </tr>
+                                    </thead>
 
-				    </div>
-				</div>
-			</div>
+                                    <tbody>
+                                    <!-- <tr>
+                                        <td>Adrian</td>
+                                        <td>F1-5 English</td>
+                                        <td><div id="placeholder-div3"></div></td>
+                                        <td>Cecilia, Jessie</td>
+                                    </tr> -->
+                                </tbody>
+                            </table>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
 
 
     <script>
-      gapi.hangout.render('placeholder-div3', {
-        'render': 'createhangout',
-        'topic': "English 101",
-        'hangout_type': 'moderated',
-        'initial_apps': [],
-        'widget_size': 72
-      });
+        $(function () {
+            $("#create").click(function () {
+                gapi.hangout.render('start_hangout', {
+                    'render': 'createhangout',
+                    'topic': "English 101",
+                    'hangout_type': 'normal',
+                    'initial_apps': [],
+                    'widget_size': 72
+                });
+
+                $("#start_hangout").trigger("click");
+            });
+        });
     </script>
-<script type="text/javascript">
-window.analytics||(window.analytics=[]),window.analytics.methods=["identify","track","trackLink","trackForm","trackClick","trackSubmit","page","pageview","ab","alias","ready","group","on","once","off"],window.analytics.factory=function(t){return function(){var a=Array.prototype.slice.call(arguments);return a.unshift(t),window.analytics.push(a),window.analytics}};for(var i=0;i<window.analytics.methods.length;i++){var method=window.analytics.methods[i];window.analytics[method]=window.analytics.factory(method)}window.analytics.load=function(t){var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=("https:"===document.location.protocol?"https://":"http://")+"d2dq2ahtl5zl1z.cloudfront.net/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n)},window.analytics.SNIPPET_VERSION="2.0.8",
-window.analytics.load("1lp79dn");
-window.analytics.page();
-analytics.identify('019mr8mf4r', {
-    email   : 'achilles@segment.io',
-    name    : 'Achilles',
-    friends : 854
-});
-</script>
+
+    <!--
+    <script type="text/javascript">
+        window.analytics||(window.analytics=[]),window.analytics.methods=["identify","track","trackLink","trackForm","trackClick","trackSubmit","page","pageview","ab","alias","ready","group","on","once","off"],window.analytics.factory=function(t){return function(){var a=Array.prototype.slice.call(arguments);return a.unshift(t),window.analytics.push(a),window.analytics}};for(var i=0;i<window.analytics.methods.length;i++){var method=window.analytics.methods[i];window.analytics[method]=window.analytics.factory(method)}window.analytics.load=function(t){var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=("https:"===document.location.protocol?"https://":"http://")+"d2dq2ahtl5zl1z.cloudfront.net/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n)},window.analytics.SNIPPET_VERSION="2.0.8",
+        window.analytics.load("1lp79dn");
+        window.analytics.page();
+        analytics.identify('019mr8mf4r', {
+            email   : 'achilles@segment.io',
+            name    : 'Achilles',
+            friends : 854
+        });
+    </script>
+-->
 </body>
 </html>
