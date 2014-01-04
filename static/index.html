@@ -2,19 +2,100 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Bojap</title>
     <meta name="description" content="" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.7, maximum-scale=0.7, user-scalable=yes" />
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/blog.css">
+    <!-- <link rel="stylesheet" href="css/normalize.css"> -->
+    <!-- <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/base-min.css"> -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
     <!--[if IE]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+
+    <script type="text/javascript" src="https://apis.google.com/js/platform.js"></script>
 </head>
 
 <body id="home">
+	<div class="pure-g-r" id="layout">
+	    <div class="sidebar pure-u">
+	        <header class="header">
+	            <hgroup>
+	                <h1 class="brand-title">Bojap</h1>
+	                <h2 class="brand-tagline">Get help from tutors and study with others</h2>
+	            </hgroup>
 
-    <h1>Hello</h1>
+	            <nav class="nav">
+	                <ul class="nav-list">
+	                    <li class="nav-item">
+	                        <a class="pure-button" href="#tutoring">Tutoring</a>
+	                    </li>
+	                    <li class="nav-item">
+	                        <a class="pure-button" href="#studygroup">Study Group</a>
+	                    </li>
+	                </ul>
+	            </nav>
+	        </header>
+	    </div>
 
+	    <div class="pure-u-1">
+			<div class="content">
+				<div class="pure-g-r">
+				    <div class="pure-u-1">
+
+				    <div class="content-subhead">Rooms</div>
+
+				    <!-- TABLE -->
+				    	<p></p>
+					    <table class="pure-table pure-table-horizontal">
+						    <thead>
+						        <tr>
+						            <th>Tutor</th>
+						            <th>Subject</th>
+						            <th>Join</th>
+						            <th>Participants</th>
+						        </tr>
+						    </thead>
+
+						    <tbody>
+						        <tr>
+						            <td>Adrian</td>
+						            <td>F1-5 English</td>
+						            <td><div id="placeholder-div3"></div></td>
+						            <td>Cecilia, Jessie</td>
+						        </tr>
+						    </tbody>
+						</table>
+
+
+				    </div>
+				</div>
+			</div>
+
+        </div>
+    </div>
+
+
+    <script>
+      gapi.hangout.render('placeholder-div3', {
+        'render': 'createhangout',
+        'topic': "English 101",
+        'hangout_type': 'moderated',
+        'initial_apps': [],
+        'widget_size': 72
+      });
+    </script>
+<script type="text/javascript">
+window.analytics||(window.analytics=[]),window.analytics.methods=["identify","track","trackLink","trackForm","trackClick","trackSubmit","page","pageview","ab","alias","ready","group","on","once","off"],window.analytics.factory=function(t){return function(){var a=Array.prototype.slice.call(arguments);return a.unshift(t),window.analytics.push(a),window.analytics}};for(var i=0;i<window.analytics.methods.length;i++){var method=window.analytics.methods[i];window.analytics[method]=window.analytics.factory(method)}window.analytics.load=function(t){var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=("https:"===document.location.protocol?"https://":"http://")+"d2dq2ahtl5zl1z.cloudfront.net/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n)},window.analytics.SNIPPET_VERSION="2.0.8",
+window.analytics.load("1lp79dn");
+window.analytics.page();
+analytics.identify('019mr8mf4r', {
+    email   : 'achilles@segment.io',
+    name    : 'Achilles',
+    friends : 854
+});
+</script>
 </body>
 </html>
