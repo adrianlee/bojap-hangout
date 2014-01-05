@@ -39,6 +39,7 @@
       <body>
 
       <script src="//plus.google.com/hangouts/_/api/v1/hangout.js"></script>
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
       <h3>Simple Hangout App</h3>
 
@@ -58,22 +59,39 @@
 
       <script>
         function showParticipants() {
+          var room = {
+            id: gapi.hangout.getHangoutId(),
+            url: gapi.hangout.getHangoutUrl(),
+            participants: gapi.hangout.getParticipants(),
+            local_participant: gapi.hangout.getLocalParticipant(),
+            local_participant_id: gapi.hangout.getLocalParticipantId(),
+            enabled_participants: gapi.hangout.getEnabledParticipants(),
+            topic: gapi.hangout.getTopic()
+          }
+
+          $(function() {
+            $.post("http://dev.bojap.com/rooms", room)
+              .done(function (data) {
+                //alert(data);
+              });          
+          });
+
           var participants = gapi.hangout.getParticipants();
 
-          console.log("gapi.hangout.getEnabledParticipants()");
-          console.log(gapi.hangout.getEnabledParticipants());
-          console.log("gapi.hangout.getHangoutUrl()");
-          console.log(gapi.hangout.getHangoutUrl());
-          console.log("gapi.hangout.getHangoutId()");
-          console.log(gapi.hangout.getHangoutId());
-          console.log("gapi.hangout.getLocalParticipant()");
-          console.log(gapi.hangout.getLocalParticipant());
-          console.log("gapi.hangout.getLocalParticipantId()");
-          console.log(gapi.hangout.getLocalParticipantId());
-          console.log("participants");
-          console.log(participants);
-          console.log("gapi.hangout.getTopic()");
-          console.log(gapi.hangout.getTopic());
+          //console.log("gapi.hangout.getEnabledParticipants()");
+          //console.log(gapi.hangout.getEnabledParticipants());
+          //console.log("gapi.hangout.getHangoutUrl()");
+          //console.log(gapi.hangout.getHangoutUrl());
+          //console.log("gapi.hangout.getHangoutId()");
+          //console.log(gapi.hangout.getHangoutId());
+          //console.log("gapi.hangout.getLocalParticipant()");
+          //console.log(gapi.hangout.getLocalParticipant());
+          //console.log("gapi.hangout.getLocalParticipantId()");
+          //console.log(gapi.hangout.getLocalParticipantId());
+          //console.log("participants");
+          //console.log(participants);
+          //console.log("gapi.hangout.getTopic()");
+          //console.log(gapi.hangout.getTopic());
           //console.log(gapi.hangout.setWillAutoLoad(true));
 
           var retVal = '<p>Participants: </p><ul>';
@@ -96,13 +114,36 @@
 
         function init() {
           // When API is ready...                                                         
-          gapi.hangout.onApiReady.add(
-              function(eventObj) {
-                if (eventObj.isApiReady) {
-                  document.getElementById('showParticipants')
-                    .style.visibility = 'visible';
-                }
-              });
+          gapi.hangout.onApiReady.add(function(eventObj) {
+            if (eventObj.isApiReady) {
+              document.getElementById('showParticipants').style.visibility = 'visible';
+
+              heartbeat();
+              setInterval(heartbeat, 30 * 1000); 
+
+              function heartbeat() {
+                $.post("http://dev.bojap.com/heartbeat", { id: gapi.hangout.getHangoutId() })
+                  .done(function (data) {
+                    console.log(data);
+                  });
+              }
+            }
+
+            //gapi.hangout.onParticipantsChanged.add(function (ParticipantsAddedEvent) {
+            //  console.log(ParticipantsAddedEvent);
+            //});
+
+            gapi.hangout.onParticipantsRemoved.add(function (ParticipantsAddedEvent) {
+              console.log("removed");
+              console.log(ParticipantsAddedEvent);
+            });
+
+            gapi.hangout.onParticipantsAdded.add(function (ParticipantsAddedEvent) {
+              console.log("added");
+              console.log(ParticipantsAddedEvent);
+            });
+
+          });
         }
 
         // Wait for gadget to load.                                                       
