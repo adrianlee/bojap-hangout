@@ -49,7 +49,7 @@
 
                             <div class="content-subhead">Create a room</div>
                             <p>
-                                <form class="pure-form pure-form-aligned">
+                                <!-- <form class="pure-form pure-form-aligned">
                                     <fieldset>
                                         <div class="pure-control-group">
                                             <label for="subject">Topic</label>
@@ -75,10 +75,8 @@
                                             <a id="create" type="submit" class="pure-button pure-button-primary">Start Hangout</a>
                                         </div>
                                     </fieldset>
-                                </form>
-                                <div id="start_container" >
-                                    <div id="start_hangout"></div>
-                                </div>
+                                </form> -->
+                                <div id="start_hangout"></div>
                             </p>
 
                             <div class="content-subhead">Rooms</div>
@@ -94,7 +92,7 @@
                                         </tr>
                                     </thead>
 
-                                    <tbody>
+                                    <tbody id="list_rooms">
                                     <!-- <tr>
                                         <td>Adrian</td>
                                         <td>F1-5 English</td>
@@ -115,18 +113,38 @@
 
     <script>
         $(function () {
-            $("#create").click(function () {
-                gapi.hangout.render('start_hangout', {
-                    'render': 'createhangout',
-                    'topic': "English 101",
-                    'hangout_type': 'normal',
-                    'initial_apps': [],
-                    'widget_size': 72
-                });
-
-                $("#start_hangout").trigger("click");
+            gapi.hangout.render('start_hangout', {
+                'render': 'createhangout',
+                'topic': "Adrian's Room",
+                'hangout_type': 'normal',
+                'initial_apps': [],
+                'widget_size': 175
             });
         });
+
+        fetchRooms();
+        setInterval(fetchRooms, 10000);
+
+        function fetchRooms() {
+            $.get("http://dev.bojap.com/rooms", function (data) {
+                // console.log("rooms online: " + data.length);
+
+                var list = document.getElementById("list_rooms");
+                var html = "";
+
+                for (var i in data) {
+                    html += "<tr>";
+                    html += "<td>" + data[i].local_participant.person.displayName + "</td>";
+                    html += "<td>" + data[i].topic + "</td>";
+                    html += "<td>" + data[i].participants.length + "</td>";
+                    html += "<td>" + "online" + "</td>";
+                    html += "<td>" + "<a href='" + data[i].url + "'>join</a>" + "</td>";
+                    html += "</tr>";
+                }
+
+                list.innerHTML = html;
+            });
+        }
     </script>
 
     <!--
