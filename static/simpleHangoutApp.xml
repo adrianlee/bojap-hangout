@@ -70,11 +70,10 @@
           }
 
           $(function() {
-            $.post("http://dev.bojap.com/create", room)
+            $.post("http://dev.bojap.com/rooms", room)
               .done(function (data) {
                 //alert(data);
-              });
-          
+              });          
           });
 
           var participants = gapi.hangout.getParticipants();
@@ -118,6 +117,16 @@
           gapi.hangout.onApiReady.add(function(eventObj) {
             if (eventObj.isApiReady) {
               document.getElementById('showParticipants').style.visibility = 'visible';
+
+              heartbeat();
+              setInterval(heartbeat, 30 * 1000); 
+
+              function heartbeat() {
+                $.post("http://dev.bojap.com/heartbeat", { id: gapi.hangout.getHangoutId() })
+                  .done(function (data) {
+                    console.log(data);
+                  });
+              }
             }
 
             //gapi.hangout.onParticipantsChanged.add(function (ParticipantsAddedEvent) {

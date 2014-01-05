@@ -9,6 +9,8 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "express": "~3.4.7"
+    "express": "~3.4.7",
+    "redis": "~0.10.0",
+    "hiredis": "~0.1.16"
   }
 }
