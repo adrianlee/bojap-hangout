@@ -128,7 +128,6 @@
         function fetchRooms() {
             $.get("http://dev.bojap.com/rooms", function (data) {
                 // console.log("rooms online: " + data.length);
-
                 var list = document.getElementById("list_rooms");
                 var html = "";
 
@@ -138,7 +137,7 @@
                     html += "<td>" + data[i].topic + "</td>";
                     html += "<td>" + data[i].participants.length + "</td>";
                     html += "<td>" + "online" + "</td>";
-                    html += "<td>" + "<a href='" + data[i].url + "'>join</a>" + "</td>";
+                    html += "<td>" + "<a href='" + data[i].url + "' target='_blank'>join</a>" + "</td>";
                     html += "</tr>";
                 }
 
