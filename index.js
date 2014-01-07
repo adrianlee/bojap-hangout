@@ -16,10 +16,6 @@ redisClient.on("error", function(err) {
   console.log("Error " + err);
 });
 
-// redisClient.set("string key", "Yay", redis.print);
-// redisClient.get("string key", redis.print);
-
-// redisClient.ltrim("rooms", 0, 3, redis.print);
 
 /*
  *  Middleware
@@ -57,9 +53,7 @@ app.get('/rooms', function (req, res) {
   var time = Date.now() - min_ago;
 
   redisClient.ZREVRANGEBYSCORE('rooms:online', "+inf", time, function (err, list) {
-    // console.log(list);
     redisClient.hmget("rooms", list, function (err, rooms) {
-      // console.log(rooms);
       for (var room in rooms) {
         rooms[room] = JSON.parse(rooms[room]);
       }
@@ -70,11 +64,6 @@ app.get('/rooms', function (req, res) {
 
 app.post('/rooms', function (req, res) {
   console.log("Hangout Created!");
-  // console.log(req.param("id"));
-  // console.log(req.param("url"));
-  // console.log(req.body);
-
-  // redisClient.lpush('rooms', JSON.stringify(req.body), redis.print);
   redisClient.hset(["rooms", req.param("id"), JSON.stringify(req.body)], redis.print);
 
   res.send(200);
@@ -92,8 +81,6 @@ app.get('/heartbeat', function (req, res) {
 
 app.post('/heartbeat', function (req, res) {
   console.log("Heartbeat Received");
-  console.log(req.body);
-  
   redisClient.ZADD('rooms:online', Date.now(), req.param("id"), redis.print);
 
   res.send(200);
@@ -103,4 +90,4 @@ app.post('/heartbeat', function (req, res) {
 /*
  *  Launch
  */
-app.listen(3000);
+app.listen(process.env.PORT || process.argv[2] || 3000);
