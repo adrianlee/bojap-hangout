@@ -2,13 +2,17 @@ var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 module.exports = function(passport) {
 
+  // Called once after Oauth success.
   passport.serializeUser(function(user, done) {
-      done(null, user);
+    console.log("serializeUser");
+    done(null, user);
   });
 
+  // After login. This is called every request.
   passport.deserializeUser(function(user, done) {
-      done(null, user);
+    done(null, user);
   });
+
 
   /*
    * Google
@@ -31,7 +35,5 @@ module.exports = function(passport) {
       });      
     }
   ));
-
-
 
 };

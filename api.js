@@ -1,14 +1,17 @@
 var express = require('express');
 var app = express();
-var passport = require('passport');
-require('./passport')(passport);
-
 
 /*
  * Redis
  */
 var redis = require('redis'),
-  redisClient = redis.createClient();
+  redisClient;
+
+redisClient = redis.createClient(6379, "bojap.com");
+
+redisClient.auth("bojappassword", function() {
+  console.log('Redis client connected');
+});
 
 redisClient.select(1, function() {
   console.log("Redis database 1 selected")
@@ -25,14 +28,10 @@ redisClient.on("error", function(err) {
 app.configure(function() {
   app.use(express.logger("dev"));
   app.use(express.compress());
-  app.use(express.cookieParser());
   app.use(express.methodOverride());
   app.use(express.json());
   app.use(express.urlencoded());
-  app.use(express.session({ secret: 'keyboard cat' }));
   app.use(cors);
-  app.use(passport.initialize());
-  app.use(passport.session());
   app.use(app.router);
   app.use(errorHandler);
 });
@@ -55,7 +54,7 @@ function errorHandler(err, req, res, next) {
  */
 app.get('/', function (req, res) {
   console.log(req.user);
-  res.send('hello world');
+  res.send('hello api');
 });
 
 app.get('/rooms', function (req, res) {
@@ -96,21 +95,7 @@ app.post('/heartbeat', function (req, res) {
   res.send(200);
 });
 
-
-// Redirect the user to Google for authentication.  When complete, Google
-// will redirect the user back to the application at
-//     /auth/google/return
-app.get('/auth/google', passport.authenticate('google'));
-
-// Google will redirect the user to this URL after authentication.  Finish
-// the process by verifying the assertion.  If valid, the user will be
-// logged in.  Otherwise, authentication has failed.
-app.get('/auth/google/return', 
-  passport.authenticate('google', { successRedirect: '/',
-                                    failureRedirect: '/' }));
-
-
 /*
  *  Launch
  */
-app.listen(process.env.PORT || process.argv[2] || 3000);
+app.listen(process.env.PORT || process.argv[2] || 8081);
