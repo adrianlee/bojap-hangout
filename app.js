@@ -29,6 +29,9 @@ redisClient.on("error", function(err) {
  *  Middleware
  */
 app.configure(function() {
+  app.engine('ejs', require('ejs-locals'));
+  app.set('views', __dirname + '/static');
+
   app.use(express.logger("dev"));
   app.use(express.compress());
   app.use(express.static(__dirname + '/static'));
@@ -45,6 +48,7 @@ app.configure(function() {
 
 function cors(req, res, next) {
   res.header('Access-Control-Allow-Origin', "*");
+  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
   next();
 }
 
@@ -60,9 +64,8 @@ function errorHandler(err, req, res, next) {
  *  ENDPOINTS
  */
 app.get('/', function (req, res) {
-  console.log(req.user);
-  // res.send('hello app');
-  res.sendfile(__dirname + '/static/pure.html');
+  console.log("asd");
+  res.render('index.html');
 });
 
 app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email', "https://www.googleapis.com/auth/hangout.participants", "https://www.googleapis.com/auth/hangout.av", "https://www.googleapis.com/auth/plus.me"] }));

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html ng-app="app">
+  <head>
+    <title>Bojap</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+  </head>
+  <body ng-controller="MainCtrl">
+    <div class="container" ng-view></div>    
+
+    <%=hello%>
+
+    <script type="text/ng-template" id="landing.html">
+      <div class="text-center">
+        <h1>Bojap</h1>
+        <p class="lead">Get help from tutors and study with others</p>
+        <p><a class="btn btn-lg btn-success" href="/auth/google" role="button">Sign in with Google</a></p>
+        {{message}}
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="app.html">
+      <div class="text-center">
+        {{message}}
+      </div>
+    </script>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-route.min.js"></script>
+    <script src="js/bojap.js"></script>
+  </body>
+</html>
