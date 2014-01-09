@@ -29,20 +29,32 @@ redisClient.on("error", function(err) {
  *  Middleware
  */
 app.configure(function() {
-  app.engine('ejs', require('ejs-locals'));
+  app.engine('jade', require('jade').__express);
   app.set('views', __dirname + '/static');
+  app.set('view engine', "jade");
 
   app.use(express.logger("dev"));
-  app.use(express.compress());
-  app.use(express.static(__dirname + '/static'));
+  app.use(express.compress());	// only affects those components added after it
+
+  // Parsers
   app.use(express.cookieParser());
   app.use(express.json());
   app.use(express.urlencoded());
+
+  // Passport Stuff
   app.use(express.session({ secret: 'keyboard cat' }));
-  app.use(cors);
   app.use(passport.initialize());
   app.use(passport.session());
+
+  // Middleware
+  app.use(cors);
+  app.use(userData);	// loggedIn
+
+  // Serve Stuff
   app.use(app.router);
+  app.use(express.static(__dirname + '/static'));	// after app.router so static index.html doesnt get served first
+
+  // Catch Errors
   app.use(errorHandler);
 });
 
@@ -50,6 +62,15 @@ function cors(req, res, next) {
   res.header('Access-Control-Allow-Origin', "*");
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
   next();
+}
+
+function userData(req, res, next) {
+	res.locals.loggedIn = req.isAuthenticated();
+	res.locals.user = "{}";
+	if (req.isAuthenticated()) {
+		res.locals.user = JSON.stringify(req.user);
+	}
+	next();
 }
 
 function errorHandler(err, req, res, next) {
@@ -64,13 +85,16 @@ function errorHandler(err, req, res, next) {
  *  ENDPOINTS
  */
 app.get('/', function (req, res) {
-  console.log("asd");
-  res.render('index.html');
+  res.render('index');
 });
 
 app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email', "https://www.googleapis.com/auth/hangout.participants", "https://www.googleapis.com/auth/hangout.av", "https://www.googleapis.com/auth/plus.me"] }));
 app.get('/auth/google/callback', passport.authenticate('google', { successRedirect: '/', failureRedirect: '/?error=login fail' }));
 
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
 
 /*
  *  Launch

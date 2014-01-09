@@ -1,0 +1,32 @@
+doctype html
+html(ng-app='app')
+  head
+    title Bojap
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(rel='stylesheet', href='css/bootstrap.min.css')
+    script.
+      var bojap = window.bojap = {}
+      bojap.loggedIn = !{loggedIn};
+      bojap.user = !{user};
+
+  body(ng-controller='MainCtrl')
+    .container(ng-view='ng-view')
+
+    script(id='landing.html', type='text/ng-template')
+      .text-center
+        h1 Bojap
+        p.lead Get help from tutors and study with others
+        p(ng-hide="loggedIn")
+          a.btn.btn-lg.btn-success(href='/auth/google', role='button') Sign in with Google
+        p(ng-show="loggedIn")
+          a.btn.btn-lg.btn-warning(href='/logout', role='button') Logout
+        p {{message}}
+
+    script(id='app.html', type='text/ng-template')
+      .text-center {{message}}
+
+    script(src='js/jquery.js')
+    script(src='js/bootstrap.min.js')
+    script(src='js/angular.min.js')
+    script(src='js/angular-route.min.js')
+    script(src='js/bojap.js')

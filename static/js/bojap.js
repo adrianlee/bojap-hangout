@@ -26,6 +26,12 @@ angular.module('app', ['ngRoute'])
 
 .controller('LandingCtrl', function ($scope) {
   // create a message to display in our view
-  $scope.message = 'Everyone come and see how good I look!';
+  $scope.loggedIn = bojap.loggedIn;
+  
+  if ($scope.loggedIn) {
+    $scope.message = 'You are already logged in.';
+  } else {
+    $scope.message = 'Please Log in';
+  }
 });
 
