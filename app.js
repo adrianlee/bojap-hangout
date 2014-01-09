@@ -62,10 +62,10 @@ function errorHandler(err, req, res, next) {
 app.get('/', function (req, res) {
   console.log(req.user);
   // res.send('hello app');
-  res.sendfile(__dirname + '/static/index.html');
+  res.sendfile(__dirname + '/static/pure.html');
 });
 
-app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
+app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email', "https://www.googleapis.com/auth/hangout.participants", "https://www.googleapis.com/auth/hangout.av", "https://www.googleapis.com/auth/plus.me"] }));
 app.get('/auth/google/callback', passport.authenticate('google', { successRedirect: '/', failureRedirect: '/?error=login fail' }));
 
 

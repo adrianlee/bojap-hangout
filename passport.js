@@ -18,9 +18,9 @@ module.exports = function(passport) {
    * Google
    */
   passport.use(new GoogleStrategy({
-      clientID: "757506080096-eesi3shfiu87qiqeqpa1bj439si4uhga.apps.googleusercontent.com",
-      clientSecret: 'xZ7-TJAdSSGR_YwciqodSa_P',
-      callbackURL: "http://localhost:8080/auth/google/callback"
+      clientID: "692122391406-gjftvker6cnq0ab54fd7jq9h7popfn76.apps.googleusercontent.com",
+      clientSecret: 'uPo1RwT95KrFgfczCL3VXTZ3',
+      callbackURL: "http://app.bojap.com/auth/google/callback"
     },
     function(token, refreshToken, profile, done) {
       // User.findOrCreate({ openId: identifier }, function(err, user) {

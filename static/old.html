@@ -10,10 +10,11 @@
     <link rel="stylesheet" href="css/blog.css">
     <!-- <link rel="stylesheet" href="css/normalize.css"> -->
     <!-- <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/base-min.css"> -->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.3.0/pure-min.css">
     <!--[if IE]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
+    <![endif]-->
 
     <script type="text/javascript" src="https://apis.google.com/js/platform.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
@@ -37,6 +38,9 @@
                             <li class="nav-item">
                                 <a class="pure-button" href="#studygroup">Study Group</a>
                             </li>
+                            <li class="nav-item">
+                            	<a class="pure-button pure-button-error" href="/auth/google"><i class="fa fa-google-plus"></i> Sign in with Google</a>
+                            </li>
                         </ul>
                     </nav>
                 </header>
@@ -49,33 +53,6 @@
 
                             <div class="content-subhead">Create a room</div>
                             <p>
-                                <!-- <form class="pure-form pure-form-aligned">
-                                    <fieldset>
-                                        <div class="pure-control-group">
-                                            <label for="subject">Topic</label>
-                                            <input id="subject" type="text" placeholder="Math 101">
-                                        </div>
-
-                                        <div class="pure-control-group">
-                                            <label for="size">Max. Participants</label>
-                                            <select id="size">
-                                                <option>2</option>
-                                                <option>3</option>
-                                                <option>4</option>
-                                                <option>5</option>
-                                                <option>6</option>
-                                                <option>7</option>
-                                                <option selected="selected">8</option>
-                                                <option>9</option>
-                                                <option>10</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="pure-controls">
-                                            <a id="create" type="submit" class="pure-button pure-button-primary">Start Hangout</a>
-                                        </div>
-                                    </fieldset>
-                                </form> -->
                                 <div id="start_hangout"></div>
                             </p>
 
@@ -126,7 +103,7 @@
         setInterval(fetchRooms, 10000);
 
         function fetchRooms() {
-            $.get("http://dev.bojap.com/rooms", function (data) {
+            $.get("http://api.bojap.com/rooms", function (data) {
                 // console.log("rooms online: " + data.length);
                 var list = document.getElementById("list_rooms");
                 var html = "";
