@@ -1,5 +1,5 @@
 var express = require('express');
-var app = express();
+var app = module.exports = express();
 var passport = require('passport');
 require('./passport')(passport);
 
@@ -84,6 +84,10 @@ function errorHandler(err, req, res, next) {
 /*
  *  ENDPOINTS
  */
+app.get('/ping', function (req, res) {
+  res.send({ loggedIn: req.isAuthenticated(), user: req.user });
+});
+
 app.get('/', function (req, res) {
   res.render('index');
 });
@@ -99,4 +103,8 @@ app.get('/logout', function(req, res){
 /*
  *  Launch
  */
-app.listen(process.env.PORT || process.argv[2] || 8080);
+
+
+if (!module.parent) {
+  app.listen(process.env.PORT || process.argv[2] || 8080);
+}
