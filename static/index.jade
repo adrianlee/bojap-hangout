@@ -16,11 +16,12 @@ html(ng-app='app')
       .text-center
         h1 Bojap
         p.lead Get help from tutors and study with others
-        p(ng-hide="loggedIn")
+        p(ng-hide="bojap.loggedIn")
           a.btn.btn-lg.btn-success(href='/auth/google', role='button') Sign in with Google
-        p(ng-show="loggedIn")
+        p(ng-show="bojap.loggedIn")
           a.btn.btn-lg.btn-warning(href='/logout', role='button') Logout
         p {{message}}
+        p {{bojap.user}}
 
     script(id='app.html', type='text/ng-template')
       .text-center {{message}}

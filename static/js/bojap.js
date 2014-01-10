@@ -16,7 +16,7 @@ angular.module('app', ['ngRoute'])
 })
 
 .controller('MainCtrl', function ($scope) {
-
+  $scope.bojap = window.bojap;
 })
 
 .controller('AppCtrl', function ($scope) {
@@ -25,10 +25,7 @@ angular.module('app', ['ngRoute'])
 
 
 .controller('LandingCtrl', function ($scope) {
-  // create a message to display in our view
-  $scope.loggedIn = bojap.loggedIn;
-  
-  if ($scope.loggedIn) {
+  if ($scope.bojap.loggedIn) {
     $scope.message = 'You are already logged in.';
   } else {
     $scope.message = 'Please Log in';

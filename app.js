@@ -100,11 +100,10 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
+
 /*
  *  Launch
  */
-
-
 if (!module.parent) {
   app.listen(process.env.PORT || process.argv[2] || 8080);
 }
