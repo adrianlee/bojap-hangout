@@ -4,11 +4,10 @@ html(ng-app='app')
     title Bojap
     meta(name='viewport', content='width=device-width, initial-scale=0.7, maximum-scale=0.7, user-scalable=yes')
 
-    link(rel='stylesheet', href='http://yui.yahooapis.com/pure/0.3.0/pure-min.css')
+    link(rel='stylesheet', href='css/pure.min.css')
     link(rel='stylesheet', href='css/side-menu.css')
     link(href='http://fonts.googleapis.com/css?family=Lato:300,400,300italic', rel='stylesheet', type='text/css')
-    script(type='text/javascript', src='https://apis.google.com/js/platform.js')
-
+    
     script.
       var bojap = window.bojap = {}
       bojap.loggedIn = !{loggedIn};
@@ -26,8 +25,6 @@ html(ng-app='app')
               a(href='#') Landing
             li
               a(href='#hangout') Hangout
-            li
-              a(href='https://github.com/yui/pure/releases/') 
             //- li(ng-show="bojap.loggedIn")
               a(href='#settings') Settings
             li.menu-item-divided(ng-show="bojap.loggedIn")
@@ -93,8 +90,8 @@ html(ng-app='app')
             tbody#list_rooms
 
 
-    script(src='js/jquery.js')
-    script(src='js/bootstrap.min.js')
-    script(src='js/angular.min.js')
-    script(src='js/angular-route.min.js')
-    script(src='js/bojap.js')
+    script(type='text/javascript', src='https://apis.google.com/js/platform.js')
+    script(type='text/javascript', src='js/jquery.js')
+    script(type='text/javascript', src='js/angular.min.js')
+    script(type='text/javascript', src='js/angular-route.min.js')
+    script(type='text/javascript', src='js/bojap.js')
