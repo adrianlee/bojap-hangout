@@ -3,6 +3,7 @@ var app = module.exports = express();
 var passport = require('passport');
 require('./passport')(passport);
 
+var RedisStore = require('connect-redis')(express);
 
 /*
  * Redis
@@ -42,7 +43,7 @@ app.configure(function() {
   app.use(express.urlencoded());
 
   // Passport Stuff
-  app.use(express.session({ secret: 'keyboard cat' }));
+  app.use(express.session({ store: new RedisStore({ port:6379, host:"bojap.com", pass:"bojappassword", db:2 }), secret: 'bojap cat' }));
   app.use(passport.initialize());
   app.use(passport.session());
 
@@ -79,6 +80,16 @@ function errorHandler(err, req, res, next) {
     error: 'Something blew up!'
   });
 }
+
+app.on('error', function (err) {
+  console.error(err)
+});
+
+process.on('uncaughtException', function (err) {
+  console.error('uncaughtException:', err.message);
+  console.error(err.stack);
+  process.exit(1);
+});
 
 
 /*
@@ -140,10 +151,22 @@ app.post('/heartbeat', function (req, res) {
   res.send(200);
 });
 
+app.get('/health', function(req, res){
+  res.send({
+    pid: process.pid,
+    memory: process.memoryUsage(),
+    uptime: process.uptime()
+  })
+})
+
 
 /*
  *  Launch
  */
 if (!module.parent) {
-  app.listen(process.env.PORT || process.argv[2] || 8080);
+  var server = app.listen(process.env.PORT || process.argv[2] || 8080);
+
+  server.on('error', function (err) {
+    console.error(err)
+  });
 }
