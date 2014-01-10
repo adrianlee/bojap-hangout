@@ -101,6 +101,46 @@ app.get('/logout', function(req, res){
 });
 
 
+
+app.get('/rooms', function (req, res) {
+  var min_ago = 60 * 1000;
+  var time = Date.now() - min_ago;
+
+  redisClient.ZREVRANGEBYSCORE('rooms:online', "+inf", time, function (err, list) {
+    redisClient.hmget("rooms", list, function (err, rooms) {
+      console.log(rooms);
+      for (var room in rooms) {
+        rooms[room] = JSON.parse(rooms[room]);
+      }
+      res.send(rooms);
+    });
+  });
+});
+
+app.post('/rooms', function (req, res) {
+  console.log("Hangout Created!");
+  redisClient.hset(["rooms", req.param("id"), JSON.stringify(req.body)], redis.print);
+
+  res.send(200);
+});
+
+app.get('/heartbeat', function (req, res) {
+  var min_ago = 60 * 1000;
+  var time = Date.now() - min_ago;
+
+  redisClient.ZREVRANGEBYSCORE('rooms:online', "+inf", time, function (err, data) {
+    res.send(data);
+  });
+});
+
+app.post('/heartbeat', function (req, res) {
+  console.log("Heartbeat Received");
+  redisClient.ZADD('rooms:online', Date.now(), req.param("id"), redis.print);
+
+  res.send(200);
+});
+
+
 /*
  *  Launch
  */
