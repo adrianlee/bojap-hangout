@@ -1,0 +1,289 @@
+body {
+  color: #777;
+  font-family: 'Lato', sans-serif;
+}
+
+/*
+Add transition to containers so they can push in and out.
+*/
+#layout,
+#menu,
+.menu-link {
+  -webkit-transition: all 0.2s ease-out;
+  -moz-transition: all 0.2s ease-out;
+  -ms-transition: all 0.2s ease-out;
+  -o-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+}
+
+/*
+This is the parent `<div>` that contains the menu and the content area.
+*/
+#layout {
+  padding-left: 180px;
+ /* left col width "#menu" */
+  left: 0;
+}
+
+.header {
+  margin: 0;
+  color: #333;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+.header h1 {
+  margin: 0.2em 0;
+  font-size: 3em;
+  font-weight: 300;
+}
+
+.header h2 {
+  font-weight: 300;
+  color: #ccc;
+  padding: 0;
+  margin-top: 0;
+}
+
+.pure-menu.pure-menu-open {
+  
+}
+
+#menu {
+  margin-left: -180px;
+ /* this should be "#menu" width */
+  width: 180px;
+  position: fixed;
+  top: 0;
+  left: 180px;
+ /* this should be "#menu" width */
+  bottom: 0;
+  z-index: 1;
+ /* so the menu or its navicon stays above all content */
+  background: #191818;
+  overflow-y: auto;
+  -webkit-overflow-scroll: touch;
+ /* for smooth scrolling on mobile */
+}
+    /*
+    All anchors inside the menu should be styled like this.
+    */
+#menu a {
+  color: #999;
+  border: none;
+  padding: 0.6em 2em;
+}
+
+    /*
+    Remove all background/borders, since we are applying them to #menu.
+    */
+#menu .pure-menu,
+#menu .pure-menu ul {
+  border: none;
+  background: transparent;
+}
+
+/*
+Add that light border to separate items into groups.
+*/
+#menu .pure-menu ul,
+#menu .pure-menu .menu-item-divided {
+  border-top: 1px solid #333;
+}
+
+/*
+Change color of the anchor links on hover/focus.
+*/
+#menu .pure-menu li a:hover,
+#menu .pure-menu li a:focus {
+  background: #333;
+}
+
+/*
+This styles the selected menu item `<li>`.
+*/
+#menu .pure-menu-selected,
+#menu .pure-menu-heading {
+  background: #1f8dd6;
+}
+
+/*
+This styles a link within a selected menu item `<li>`.
+*/
+#menu .pure-menu-selected a {
+  color: #fff;
+}
+
+/*
+This styles the menu heading.
+*/
+#menu .pure-menu-heading {
+  font-size: 110%;
+  color: #fff;
+  margin: 0;
+}
+
+/* -- Dynamic Button For Responsive Menu -------------------------------------*/
+
+/*
+The button to open/close the Menu is custom-made and not part of Pure. Here's
+how it works:
+*/
+
+/*
+`.menu-link` represents the responsive menu toggle that shows/hides on
+small screens.
+*/
+.menu-link {
+  display: none; /* show this only on small screens */
+  top: 0;
+  left: 180px; /* `#menu`'s width */
+  background: #000;
+  font-size: 10px; /* change this value to increase/decrease button size */
+  z-index: 10;
+  width: 2em;
+  height: auto;
+  padding: 2.2em 1.6em;
+}
+
+.menu-link:hover,
+.menu-link:focus {
+  background: #000;
+}
+
+.menu-link span {
+  position: relative;
+  display: block;
+}
+
+.menu-link span,
+.menu-link span:before,
+.menu-link span:after {
+  background-color: #fff;
+  width: 100%;
+  height: 0.2em;
+}
+
+.menu-link span:before,
+.menu-link span:after {
+  position: absolute;
+  margin-top: -0.6em;
+  content: " ";
+}
+
+.menu-link span:after {
+  margin-top: 0.6em;
+}
+
+
+@media (max-width: 767px) {
+
+  /*
+  Navigation Push styles.
+  */
+  #layout {
+      position: relative;
+      padding-left: 0;
+  }
+
+  #layout.active {
+    position: relative;
+    left: 180px;
+  }
+
+  #layout.active #menu {
+    left: 180px;
+    width: 180px;
+  }
+
+  #menu {
+    left: 0;
+  }
+
+  .menu-link {
+    position: fixed;
+    left: 0;
+    display: block; /* show the button on small screens */
+  }
+
+  #layout.active .menu-link {
+    left: 180px;
+  }
+}
+
+
+.content {
+  padding: 2em 3em 0;
+  margin: 1em auto;
+  max-width: 800px;
+}
+
+.content-subhead {
+  text-transform: uppercase;
+  color: #aaa;
+  border-bottom: 1px solid #eee;
+  padding: 0.4em 0;
+  font-size: 80%;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+.content-header {
+  margin: 40px 0 20px 0;
+  color: #888;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.footer {
+  text-align: center;
+  padding: 1em 0;
+}
+
+.footer a {
+  color: #ccc;
+  font-size: 80%;
+}
+
+.footer .pure-menu a:hover,
+.footer .pure-menu a:focus {
+  background: none;
+}
+
+@media (max-width: 767px) {
+  #layout {
+    padding: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 2em 1em 0;
+  }
+}
+
+
+.pure-button-success,
+.pure-button-error,
+.pure-button-warning,
+.pure-button-secondary {
+  color: white;
+  border-radius: 4px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.pure-button-success {
+  background: rgb(28, 184, 65); /* this is a green */
+}
+
+.pure-button-error {
+  background: rgb(202, 60, 60); /* this is a maroon */
+}
+
+.pure-button-warning {
+  background: rgb(223, 117, 20); /* this is an orange */
+}
+
+.pure-button-secondary {
+  background: rgb(66, 184, 221); /* this is a light blue */
+}

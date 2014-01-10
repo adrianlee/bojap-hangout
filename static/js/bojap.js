@@ -6,9 +6,9 @@ angular.module('app', ['ngRoute'])
       controller: 'LandingCtrl',
       templateUrl: 'landing.html'
     })
-    .when('/app', {
-      controller: 'AppCtrl',
-      templateUrl: 'app.html'
+    .when('/hangout', {
+      controller: 'HangoutCtrl',
+      templateUrl: 'hangout.html'
     })
     .otherwise({
       redirectTo:'/'
@@ -16,8 +16,27 @@ angular.module('app', ['ngRoute'])
 })
 
 .controller('MainCtrl', function ($scope) {
+  // Fetch server passed object
   $scope.bojap = window.bojap;
 
+  // Side Menu
+  $(function() {
+    $('#menuLink').click(function (e) {
+      e.preventDefault();
+      $('#layout').toggleClass('active');
+      // $('#menu').toggleClass('active');
+      // $('#menuLink').toggleClass('active');
+    });
+
+    $('#nav li').click(function (e) {
+      // setTimeout(function() {
+        $('#layout').removeClass('active');
+      // }, 200);
+    });
+  });
+})
+
+.controller('HangoutCtrl', function ($scope) {
   $(function () {
       gapi.hangout.render('start_hangout', {
           'render': 'createhangout',
@@ -32,36 +51,31 @@ angular.module('app', ['ngRoute'])
   setInterval(fetchRooms, 10000);
 
   function fetchRooms() {
-      $.get("/rooms", function (data) {
-          // console.log("rooms online: " + data.length);
-          var list = document.getElementById("list_rooms");
-          var html = "";
+    $.get("/rooms", function (data) {
+      // console.log("rooms online: " + data.length);
+      var list = document.getElementById("list_rooms");
+      var html = "";
 
-          for (var i in data) {
-              html += "<tr>";
-              html += "<td>" + data[i].local_participant.person.displayName + "</td>";
-              html += "<td>" + data[i].topic + "</td>";
-              html += "<td>" + data[i].participants.length + "</td>";
-              html += "<td>" + "online" + "</td>";
-              html += "<td>" + "<a href='" + data[i].url + "' target='_blank'>join</a>" + "</td>";
-              html += "</tr>";
-          }
+      for (var i in data) {
+          html += "<tr>";
+          html += "<td>" + data[i].local_participant.person.displayName + "</td>";
+          html += "<td>" + data[i].topic + "</td>";
+          html += "<td>" + data[i].participants.length + "</td>";
+          html += "<td>" + "online" + "</td>";
+          html += "<td>" + "<a href='" + data[i].url + "' target='_blank'>join</a>" + "</td>";
+          html += "</tr>";
+      }
 
-          list.innerHTML = html;
-      });
+      list.innerHTML = html;
+    });
   }
-})
-
-.controller('AppCtrl', function ($scope) {
-  $scope.message = "Signed In!";
 })
 
 
 .controller('LandingCtrl', function ($scope) {
   if ($scope.bojap.loggedIn) {
-    $scope.message = 'You are already logged in.';
+    $scope.message = "Hello " + $scope.bojap.user.displayName;
   } else {
-    $scope.message = 'Please Log in';
+    $scope.message = 'Hello Anonymous, Please Log in';
   }
 });
-

@@ -2,48 +2,96 @@ doctype html
 html(ng-app='app')
   head
     title Bojap
-    meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    link(rel='stylesheet', href='css/bootstrap.min.css')
+    meta(name='viewport', content='width=device-width, initial-scale=0.7, maximum-scale=0.7, user-scalable=yes')
+
+    link(rel='stylesheet', href='http://yui.yahooapis.com/pure/0.3.0/pure-min.css')
+    link(rel='stylesheet', href='css/side-menu.css')
+    link(href='http://fonts.googleapis.com/css?family=Lato:300,400,300italic', rel='stylesheet', type='text/css')
     script(type='text/javascript', src='https://apis.google.com/js/platform.js')
+
     script.
       var bojap = window.bojap = {}
       bojap.loggedIn = !{loggedIn};
       bojap.user = !{user};
 
   body(ng-controller='MainCtrl')
-    .container(ng-view='ng-view')
+    #layout
+      a(id='menuLink', class='menu-link', href)
+        span
+      #menu
+        .pure-menu.pure-menu-open
+          a.pure-menu-heading(href='/') Bojap
+          ul#nav
+            li
+              a(href='#') Landing
+            li
+              a(href='#hangout') Hangout
+            li
+              a(href='https://github.com/yui/pure/releases/') 
+            //- li(ng-show="bojap.loggedIn")
+              a(href='#settings') Settings
+            li.menu-item-divided(ng-show="bojap.loggedIn")
+              a(href='/logout') Logout
+      #main(ng-view='ng-view')
+
 
     script(id='landing.html', type='text/ng-template')
-      .text-center
-        h1 Bojap
-        p.lead Get help from tutors and study with others
-        p(ng-hide="bojap.loggedIn")
-          a.btn.btn-lg.btn-success(href='/auth/google', role='button') Sign in with Google
-        p(ng-show="bojap.loggedIn")
-          a.btn.btn-lg.btn-warning(href='/logout', role='button') Logout
-      p {{message}}
-      p {{bojap.user}}
-      .container
-        .row
-          .col-sm-4
-            p
-              #start_hangout
-          .col-sm-8
-            .panel.panel-default
-              .panel-heading Rooms Online
-              .panel-body
-                table.table.table-striped.table-hover.table-bordered
-                  thead
-                      tr
-                        th Tutor
-                        th Subject
-                        th Participants
-                        th Status
-                        th URL
-                  tbody#list_rooms
+      .content
+        //- .header
+          h1 Bojap
+          h2 Get help from tutors and study with others
 
-    script(id='app.html', type='text/ng-template')
-      .text-center {{message}}
+        .content-subhead {{message}}
+        p(ng-hide="bojap.loggedIn")
+          a.pure-button.pure-button-success(href='/auth/google') Sign in with Google
+        div(ng-show="bojap.loggedIn")
+          p
+            .pure-menu.pure-menu-open.pure-menu-horizontal
+              ul
+                li.pure-menu-selected
+                  a(href='#') Home
+                li
+                  a(href='#') Messages
+                li
+                  a(href='#') Profile
+                li
+                  a(href='#') Settings
+                li
+                  a(href='#') Help
+
+          h2.content-header Home
+          p Tic Tail Step By Step
+
+          h2.content-header Private Messages
+          p No Private Messages
+
+          h2.content-header Profile
+          p Do you want to learn or do you want to Teach?
+
+          h2.content-header Settings
+          p App settings
+
+          h2.content-header Help
+          p Redirect to zendesk or other
+
+
+    script(id='hangout.html', type='text/ng-template')
+      .content
+        .content-subhead Create a Room
+        p
+          #start_hangout
+        .content-subhead Rooms online
+        p
+          table.pure-table.pure-table-border
+            thead
+                tr
+                  th Tutor
+                  th Subject
+                  th Participants
+                  th Status
+                  th URL
+            tbody#list_rooms
+
 
     script(src='js/jquery.js')
     script(src='js/bootstrap.min.js')
