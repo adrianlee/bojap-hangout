@@ -70,7 +70,7 @@
           }
 
           $(function() {
-            $.post("http://api.bojap.com/rooms", room)
+            $.post("http://app.bojap.com/rooms", room)
               .done(function (data) {
                 //alert(data);
               });          
@@ -122,7 +122,7 @@
               setInterval(heartbeat, 30 * 1000); 
 
               function heartbeat() {
-                $.post("http://api.bojap.com/heartbeat", { id: gapi.hangout.getHangoutId() })
+                $.post("http://app.bojap.com/heartbeat", { id: gapi.hangout.getHangoutId() })
                   .done(function (data) {
                     console.log(data);
                   });
