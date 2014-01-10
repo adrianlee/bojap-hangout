@@ -60,9 +60,9 @@ angular.module('app', ['ngRoute'])
           html += "<tr>";
           html += "<td>" + data[i].local_participant.person.displayName + "</td>";
           html += "<td>" + data[i].topic + "</td>";
-          html += "<td>" + data[i].participants.length + "</td>";
-          html += "<td>" + "online" + "</td>";
-          html += "<td>" + "<a href='" + data[i].url + "' target='_blank'>join</a>" + "</td>";
+          html += "<td>" + data[i].participants.length + "/8</td>";
+          // html += "<td>" + "online" + "</td>";
+          html += "<td>" + "<a class='button pure-button pure-button-xsmall pure-button-secondary' href='" + data[i].url + "' target='_blank'>join</a>" + "</td>";
           html += "</tr>";
       }
 

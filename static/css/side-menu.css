@@ -287,3 +287,23 @@ small screens.
 .pure-button-secondary {
   background: rgb(66, 184, 221); /* this is a light blue */
 }
+
+.pure-button-xsmall {
+    font-size: 70%;
+}
+
+.pure-button-small {
+    font-size: 85%;
+}
+
+.pure-button-large {
+    font-size: 110%;
+}
+
+.pure-button-xlarge {
+    font-size: 125%;
+}
+
+#list_rooms {
+  text-align: center;
+}
