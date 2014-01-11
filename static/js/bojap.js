@@ -24,14 +24,19 @@ angular.module('app', ['ngRoute'])
     $('#menuLink').click(function (e) {
       e.preventDefault();
       $('#layout').toggleClass('active');
-      // $('#menu').toggleClass('active');
-      // $('#menuLink').toggleClass('active');
+      e.stopPropagation();
     });
 
-    $('#nav li').click(function (e) {
-      // setTimeout(function() {
+    // $('#nav li').click(function (e) {
+    //   // setTimeout(function() {
+    //     $('#layout').removeClass('active');
+    //   // }, 200);
+    // });
+
+    $(document).click(function (e) {
+      if ($('#layout').hasClass('active')) {
         $('#layout').removeClass('active');
-      // }, 200);
+      }
     });
   });
 })

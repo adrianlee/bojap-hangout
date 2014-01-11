@@ -1,30 +1,15 @@
 var express = require('express');
 var app = module.exports = express();
+
 var passport = require('passport');
 require('./passport')(passport);
 
+var redis = require('redis');
 var RedisStore = require('connect-redis')(express);
+require('./redis')(redis);
 
-/*
- * Redis
- */
-var redis = require('redis'),
-  redisClient;
-
-redisClient = redis.createClient(6379, "bojap.com");
-
-redisClient.auth("bojappassword", function() {
-  console.log('Redis client connected');
-});
-
-redisClient.select(1, function() {
-  console.log("Redis database 1 selected")
-});
-
-redisClient.on("error", function(err) {
-  console.log("Error " + err);
-});
-
+var mongoose = require('mongoose');
+require('./mongoose')(mongoose);
 
 /*
  *  Middleware

@@ -20,7 +20,7 @@ Add transition to containers so they can push in and out.
 This is the parent `<div>` that contains the menu and the content area.
 */
 #layout {
-  padding-left: 180px;
+  padding-left: 200px;
  /* left col width "#menu" */
   left: 0;
 }
@@ -50,17 +50,17 @@ This is the parent `<div>` that contains the menu and the content area.
 }
 
 #menu {
-  margin-left: -180px;
+  margin-left: -200px;
  /* this should be "#menu" width */
-  width: 180px;
+  width: 200px;
   position: fixed;
   top: 0;
-  left: 180px;
+  left: 200px;
  /* this should be "#menu" width */
   bottom: 0;
   z-index: 1;
  /* so the menu or its navicon stays above all content */
-  background: #191818;
+  background: #262424;
   overflow-y: auto;
   -webkit-overflow-scroll: touch;
  /* for smooth scrolling on mobile */
@@ -137,7 +137,7 @@ small screens.
 .menu-link {
   display: none; /* show this only on small screens */
   top: 0;
-  left: 180px; /* `#menu`'s width */
+  left: 200px; /* `#menu`'s width */
   background: #000;
   font-size: 10px; /* change this value to increase/decrease button size */
   z-index: 10;
@@ -188,12 +188,12 @@ small screens.
 
   #layout.active {
     position: relative;
-    left: 180px;
+    left: 200px;
   }
 
   #layout.active #menu {
-    left: 180px;
-    width: 180px;
+    left: 200px;
+    width: 200px;
   }
 
   #menu {
@@ -207,10 +207,15 @@ small screens.
   }
 
   #layout.active .menu-link {
-    left: 180px;
+    left: 200px;
   }
 }
 
+#main {
+  max-height: 100%;
+  height: 100%;
+  background-color: #f8f8f8;
+}
 
 .content {
   padding: 2em 3em 0;
