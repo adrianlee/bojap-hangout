@@ -46,30 +46,32 @@ html(ng-app='app')
             .pure-menu.pure-menu-open.pure-menu-horizontal
               ul
                 li.pure-menu-selected
-                  a(href='#') Home
+                  a(href, ng-click="changeTemplate('welcome')") Welcome
                 li
-                  a(href='#') Messages
+                  a(href, ng-click="changeTemplate('messages')") Messages
                 li
-                  a(href='#') Profile
+                  a(href, ng-click="changeTemplate('profile')") Profile
                 li
-                  a(href='#') Settings
+                  a(href, ng-click="changeTemplate('settings')") Settings
                 li
-                  a(href='#') Support & Feedback
+                  a(href, ng-click="changeTemplate('feedback')") Support & Feedback
 
-          h2.content-header Home
-          p Tic Tail Step By Step
+          //- h2.content-header Home
+          //- p Tic Tail Step By Step
 
-          h2.content-header Private Messages
-          div(ng-include src="'messages.html'")
+          //- h2.content-header Private Messages
+          //- div(ng-include src="'messages.html'")
 
-          h2.content-header Profile
-          div(ng-include src="'profile.html'")
+          //- h2.content-header Profile
+          //- div(ng-include src="'profile.html'")
 
-          h2.content-header Settings
-          div(ng-include src="'settings.html'")
+          //- h2.content-header Settings
+          //- div(ng-include src="'settings.html'")
 
-          h2.content-header Support & Feedback
-          div(ng-include src="'feedback.html'")
+          //- h2.content-header Support & Feedback
+          //- div(ng-include src="'feedback.html'")
+
+          div(ng-include src="template")
 
 
     script(id='hangout.html', type='text/ng-template')
@@ -88,6 +90,10 @@ html(ng-app='app')
                   //- th Status
                   th URL
             tbody#list_rooms
+
+    script(id="welcome.html", type='text/ng-template')
+      h2.content-header Home
+      p Tic Tail Step By Step
 
     script(id="messages.html", type='text/ng-template')
       div(ng-controller="Message")

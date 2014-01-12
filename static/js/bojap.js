@@ -85,6 +85,20 @@ angular.module('app', ['ngRoute'])
   } else {
     $scope.message = 'Hello Anonymous, Please Log in';
   }
+
+  $scope.templates = {
+    welcome: "welcome.html",
+    messages: "messages.html",
+    profile: "profile.html",
+    settings: "settings.html",
+    feedback: "feedback.html"
+  };
+
+  $scope.changeTemplate = function (template) {
+    $scope.template = $scope.templates[template];
+  };
+
+  $scope.template = $scope.templates.welcome;
 })
 
 .controller('Profile', function ($scope) {
