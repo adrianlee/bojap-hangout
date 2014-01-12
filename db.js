@@ -11,10 +11,20 @@ mongoose.connect(MONGOLAB_URI , function (err, res) {
 });
 
 var UserSchema = {
-  id: String,
   displayName: String,
-  gender: String,
-  locale: String
+  emails: [{ value: String }],
+  googleId: String,
+  google: {
+    id: String,
+    email: String,
+    verified_email: Boolean,
+    name: String,
+    given_name: String,
+    family_name: String,
+    link: String,
+    gender: String,
+    locale: String
+  }
 };
 
 var UserModel = mongoose.model('User', UserSchema);

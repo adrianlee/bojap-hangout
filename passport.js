@@ -8,22 +8,25 @@ module.exports = function(passport) {
   passport.serializeUser(function(profile, done) {
     console.log("serializeUser");
 
-    db.User.findOne({id: profile.id}, function (err, user) {
+    console.log(profile);
+
+    db.User.findOne({ googleId: profile.id }, function (err, user) {
       if (err) return done(err);
       
       console.log(user);
 
       if (!user) {
-        var newUser = new db.User(profile);
+        var newUser = new db.User({ googleId: profile.id, displayName: profile.displayName, emails: profile.emails, google: profile._json });
         newUser.save(function (err, newProfile) {
           if (err) return done(err);
           console.log("New Profile Created for " + newProfile.displayName);
 
-          return done(null, newProfile.id);
+          return done(null, newProfile.googleId);
         });
       } else {
         console.log("Profile found for " + user.displayName);
-        return done(null, user.id);
+        console.log(user);
+        return done(null, user.googleId);
       }
     });
   });
@@ -33,7 +36,7 @@ module.exports = function(passport) {
   passport.deserializeUser(function(id, done) {
     console.log("deserializeUser");
 
-    db.User.findOne({id: id}, function (err, profile) {
+    db.User.findOne({googleId: id}, function (err, profile) {
       // Error with db
       if (err) return done(err);
 

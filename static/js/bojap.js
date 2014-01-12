@@ -1,13 +1,15 @@
+'use strict';
+
 angular.module('app', ['ngRoute'])
 
 .config(function($routeProvider) {
   $routeProvider
     .when('/', {
-      controller: 'LandingCtrl',
+      controller: 'Landing',
       templateUrl: 'landing.html'
     })
     .when('/hangout', {
-      controller: 'HangoutCtrl',
+      controller: 'Hangout',
       templateUrl: 'hangout.html'
     })
     .otherwise({
@@ -15,7 +17,7 @@ angular.module('app', ['ngRoute'])
     });
 })
 
-.controller('MainCtrl', function ($scope) {
+.controller('Main', function ($scope) {
   // Fetch server passed object
   $scope.bojap = window.bojap;
 
@@ -41,7 +43,7 @@ angular.module('app', ['ngRoute'])
   });
 })
 
-.controller('HangoutCtrl', function ($scope) {
+.controller('Hangout', function ($scope) {
   $(function () {
       gapi.hangout.render('start_hangout', {
           'render': 'createhangout',
@@ -77,10 +79,56 @@ angular.module('app', ['ngRoute'])
 })
 
 
-.controller('LandingCtrl', function ($scope) {
+.controller('Landing', function ($scope) {
   if ($scope.bojap.loggedIn) {
     $scope.message = "Hello " + $scope.bojap.user.displayName;
   } else {
     $scope.message = 'Hello Anonymous, Please Log in';
+  }
+})
+
+.controller('Profile', function ($scope) {
+  if ($scope.bojap.loggedIn) {
+    $scope.profile = $scope.bojap.user;
+  } else {
+    $scope.profile = "Profile not found. Are you logged in?";
+  }
+})
+
+.controller('Message', function ($scope) {
+  $scope.master = {};
+
+  $scope.send = function (input) {
+    console.log(input);
+
+    // success
+    $('#compose').toggle();
+    $scope.reset();
+  };
+
+  $scope.reset = function () {
+    $scope.input = angular.copy($scope.master);
+  }
+})
+
+.controller('Settings', function ($scope) {
+  if ($scope.bojap.loggedIn) {
+    $scope.settings = $scope.bojap.user;
+  } else {
+    $scope.settings = "Are you logged in?";
+  }
+})
+
+.controller('Feedback', function ($scope) {
+  $scope.master = {};
+  
+  $scope.send = function (feedback) {
+    console.log(feedback);
+
+    $scope.reset();
+  };
+
+  $scope.reset = function () {
+    $scope.feedback = angular.copy($scope.master);
   }
 });

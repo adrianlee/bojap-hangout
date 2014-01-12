@@ -4,16 +4,16 @@ html(ng-app='app')
     title Bojap
     meta(name='viewport', content='width=device-width, initial-scale=0.7, maximum-scale=0.7, user-scalable=yes')
 
-    link(rel='stylesheet', href='css/pure.min.css')
-    link(rel='stylesheet', href='css/side-menu.css')
     link(href='http://fonts.googleapis.com/css?family=Lato:300,400,300italic', rel='stylesheet', type='text/css')
+    link(rel='stylesheet', href='css/pure.min.css')
+    link(rel='stylesheet', href='css/bojap.css')
     
     script.
       var bojap = window.bojap = {}
       bojap.loggedIn = !{loggedIn};
       bojap.user = !{user};
 
-  body(ng-controller='MainCtrl')
+  body(ng-controller='Main')
     #layout
       a(id='menuLink', class='menu-link', href)
         span
@@ -54,22 +54,22 @@ html(ng-app='app')
                 li
                   a(href='#') Settings
                 li
-                  a(href='#') Help
+                  a(href='#') Support & Feedback
 
           h2.content-header Home
           p Tic Tail Step By Step
 
           h2.content-header Private Messages
-          p No Private Messages
+          div(ng-include src="'messages.html'")
 
           h2.content-header Profile
-          p Do you want to learn or do you want to Teach?
+          div(ng-include src="'profile.html'")
 
           h2.content-header Settings
-          p App settings
+          div(ng-include src="'settings.html'")
 
-          h2.content-header Help
-          p Redirect to zendesk or other
+          h2.content-header Support & Feedback
+          div(ng-include src="'feedback.html'")
 
 
     script(id='hangout.html', type='text/ng-template')
@@ -89,6 +89,77 @@ html(ng-app='app')
                   th URL
             tbody#list_rooms
 
+    script(id="messages.html", type='text/ng-template')
+      div(ng-controller="Message")
+        p
+          a.pure-button.pure-button-success(onclick="$('#compose').toggle()") Create
+        form.pure-form(id="compose", style="display: none;")
+          fieldset
+            .pure-group
+              input.pure-input-2-3(type="text", placeholder="Recipient", ng-model="input.recipient")
+              input.pure-input-2-3(type="text", placeholder="Subject", ng-model="input.subject")
+            .pure-group
+              textarea.pure-input-2-3(style="height: 120px;", placeholder="Your Message...", ng-model="input.body")
+            .pure-group
+              a.pure-button.pure-button-primary(style="margin: .35em 0;", ng-click="send(input)") Send
+
+        p
+          table.pure-table
+            thead
+              tr
+                th Recipient
+                th Message
+                th Last reply
+            tbody
+              tr.pure-table-odd
+                td Honda
+                td What is my mouse pad so small?
+                td 2009
+              tr
+                td Toyota
+                td When can you add zopim to this website
+                td 2012
+              tr.pure-table-odd
+                td Hyundai
+                td We need analytics! NOW!
+                td 2010
+
+    script(id="profile.html", type='text/ng-template')
+      div(ng-controller="Profile")
+        //- p Do you want to learn or do you want to Teach?
+
+        form.pure-form.pure-form-aligned
+          fieldset
+            .pure-control-group
+              label(for='name') Name
+              input#name.pure-input-1-2(type='text', placeholder='Username', value="{{profile.displayName}}")
+            .pure-control-group
+              label(for='email') Contact Email
+              input#email.pure-input-1-2(type='email', placeholder='Email Address', value="{{profile.emails[0].value}}")
+            .pure-control-group
+              label(for="bio") Bio
+              textarea#bio.pure-input-1-2(style="height: 120px;", placeholder="Tell others about yourself...", ng-model="input.body")
+            .pure-controls
+              button.pure-button.pure-button-primary(type='submit') Save Changes
+
+         p {{profile}}
+
+
+    script(id="settings.html", type='text/ng-template')
+      p app settings
+
+
+    script(id="feedback.html", type='text/ng-template')
+      //- p Redirect to zendesk or other
+
+      div(ng-controller="Feedback")
+
+        form.pure-form(id="feedback")
+          fieldset
+            .pure-group
+              textarea.pure-input-2-3(style="height: 120px;", placeholder="Need help or have suggestions?", ng-model="feedback.body")
+            .pure-group
+              a.pure-button.pure-button-primary(style="margin: .35em 0;", ng-click="send(feedback)") Send
 
     script(type='text/javascript', src='https://apis.google.com/js/platform.js')
     script(type='text/javascript', src='js/jquery.js')
