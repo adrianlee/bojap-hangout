@@ -1,16 +1,49 @@
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
+var db = require('./db');
+
 module.exports = function(passport) {
 
   // Called once after Oauth success.
-  passport.serializeUser(function(user, done) {
+  passport.serializeUser(function(profile, done) {
     console.log("serializeUser");
-    done(null, user);
+    
+    db.User.findOne({id: profile.id}, function (err, user) {
+      if (err) return done(err);
+      
+      console.log(user);
+
+      if (!user) {
+        var newUser = new db.User(profile);
+        newUser.save(function (err, newProfile) {
+          if (err) return done(err);
+          console.log("New Profile Created for " + newProfile.displayName);
+
+          return done(null, newProfile.id);
+        });
+      } else {
+        console.log("Profile found for " + user.displayName);
+        return done(null, user.id);
+      }
+    });
   });
 
   // After login. This is called every request.
-  passport.deserializeUser(function(user, done) {
-    done(null, user);
+  passport.deserializeUser(function(id, done) {
+    console.log("deserializeUser");
+
+    db.User.findOne({id: id}, function (err, profile) {
+      // Error with db
+      if (err) return done(err);
+
+      // profile doesn't exist
+      if (!profile) {
+        return done(null, false);
+      }
+
+      // If profile exists
+      return done(null, profile);
+    });
   });
 
 
@@ -29,8 +62,7 @@ module.exports = function(passport) {
 
       process.nextTick(function() {
         console.log(token);
-        console.log(refreshToken);
-        console.log(profile);
+        // console.log(profile);
         done(null, profile);
       });      
     }

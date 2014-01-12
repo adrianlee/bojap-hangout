@@ -1,4 +1,6 @@
-module.exports = function(redis) {
+var redis = require('redis');
+
+module.exports = function() {
   var redisClient = redis.createClient(6379, "bojap.com");
 
   redisClient.auth("bojappassword", function() {
@@ -12,4 +14,8 @@ module.exports = function(redis) {
   redisClient.on("error", function(err) {
     console.log("Error " + err);
   });
+
+  return {
+    client: redisClient
+  }
 };

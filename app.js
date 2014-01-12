@@ -6,7 +6,7 @@ require('./passport')(passport);
 
 var redis = require('redis');
 var RedisStore = require('connect-redis')(express);
-require('./redis')(redis);
+var redisClient = require('./redis')().client;
 
 var mongoose = require('mongoose');
 require('./mongoose')(mongoose);
