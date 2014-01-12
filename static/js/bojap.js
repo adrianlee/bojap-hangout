@@ -56,7 +56,7 @@ angular.module('app', ['ngRoute'])
   setInterval(fetchRooms, 10000);
 
   function fetchRooms() {
-    $.get("/rooms", function (data) {
+    $.get("/api/rooms", function (data) {
       // console.log("rooms online: " + data.length);
       var list = document.getElementById("list_rooms");
       var html = "";

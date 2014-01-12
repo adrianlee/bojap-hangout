@@ -7,7 +7,7 @@ module.exports = function(passport) {
   // Called once after Oauth success.
   passport.serializeUser(function(profile, done) {
     console.log("serializeUser");
-    
+
     db.User.findOne({id: profile.id}, function (err, user) {
       if (err) return done(err);
       
@@ -29,6 +29,7 @@ module.exports = function(passport) {
   });
 
   // After login. This is called every request.
+  // TODO: Instead of hitting mongo, hit redis, if not found then hit mongo.
   passport.deserializeUser(function(id, done) {
     console.log("deserializeUser");
 

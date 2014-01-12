@@ -8,8 +8,7 @@ var redis = require('redis');
 var RedisStore = require('connect-redis')(express);
 var redisClient = require('./redis')().client;
 
-var mongoose = require('mongoose');
-require('./mongoose')(mongoose);
+var db = require('./db');
 
 /*
  *  Middleware
@@ -28,7 +27,7 @@ app.configure(function() {
   app.use(express.urlencoded());
 
   // Passport Stuff
-  app.use(express.session({ store: new RedisStore({ port:6379, host:"bojap.com", pass:"bojappassword", db:2 }), secret: 'bojap cat' }));
+  app.use(express.session({ store: new RedisStore({ port: 6379, host: "bojap.com", pass: "bojappassword", db: 2 }), secret: 'bojap cat' }));
   app.use(passport.initialize());
   app.use(passport.session());
 
@@ -80,10 +79,6 @@ process.on('uncaughtException', function (err) {
 /*
  *  ENDPOINTS
  */
-app.get('/ping', function (req, res) {
-  res.send({ loggedIn: req.isAuthenticated(), user: req.user });
-});
-
 app.get('/', function (req, res) {
   res.render('index');
 });
@@ -96,9 +91,11 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
+app.get('/api/ping', function (req, res) {
+  res.send({ loggedIn: req.isAuthenticated(), user: req.user });
+});
 
-
-app.get('/rooms', function (req, res) {
+app.get('/api/rooms', function (req, res) {
   var min_ago = 60 * 1000;
   var time = Date.now() - min_ago;
 
@@ -113,14 +110,14 @@ app.get('/rooms', function (req, res) {
   });
 });
 
-app.post('/rooms', function (req, res) {
+app.post('/api/rooms', function (req, res) {
   console.log("Hangout Created!");
   redisClient.hset(["rooms", req.param("id"), JSON.stringify(req.body)], redis.print);
 
   res.send(200);
 });
 
-app.get('/heartbeat', function (req, res) {
+app.get('/api/heartbeat', function (req, res) {
   var min_ago = 60 * 1000;
   var time = Date.now() - min_ago;
 
@@ -129,20 +126,32 @@ app.get('/heartbeat', function (req, res) {
   });
 });
 
-app.post('/heartbeat', function (req, res) {
+app.post('/api/heartbeat', function (req, res) {
   console.log("Heartbeat Received");
   redisClient.ZADD('rooms:online', Date.now(), req.param("id"), redis.print);
 
   res.send(200);
 });
 
-app.get('/health', function(req, res){
+app.get('/api/health', function(req, res){
   res.send({
     pid: process.pid,
     memory: process.memoryUsage(),
     uptime: process.uptime()
   })
-})
+});
+
+app.get('/api/profile', function (req, res) {
+  var id = req.user && req.user.id;
+
+  db.User.findOne({id: id}, function (err, user) {
+    if (err) return res.send(500, err);
+
+    if (!user) return res.send(404, "user not found");
+
+    res.send(user);
+  });
+});
 
 
 /*
