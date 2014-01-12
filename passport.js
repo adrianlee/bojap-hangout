@@ -16,7 +16,7 @@ module.exports = function(passport) {
       console.log(user);
 
       if (!user) {
-        var newUser = new db.User({ googleId: profile.id, displayName: profile.displayName, emails: profile.emails, google: profile._json });
+        var newUser = new db.User({ googleId: profile.id, displayName: profile.displayName, email: profile._json.email, google: profile._json });
         newUser.save(function (err, newProfile) {
           if (err) return done(err);
           console.log("New Profile Created for " + newProfile.displayName);

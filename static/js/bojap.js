@@ -12,6 +12,22 @@ angular.module('app', ['ngRoute'])
       controller: 'Hangout',
       templateUrl: 'hangout.html'
     })
+    .when('/messages', {
+      controller: 'Landing',
+      templateUrl: 'landing.html'
+    })
+    .when('/profile', {
+      controller: 'Landing',
+      templateUrl: 'landing.html',
+    })
+    .when('/settings', {
+      controller: 'Landing',
+      templateUrl: 'landing.html',
+    })
+    .when('/feedback', {
+      controller: 'Landing',
+      templateUrl: 'landing.html',
+    })
     .otherwise({
       redirectTo:'/'
     });
@@ -78,8 +94,7 @@ angular.module('app', ['ngRoute'])
   }
 })
 
-
-.controller('Landing', function ($scope) {
+.controller('Landing', function ($scope, $route) {
   if ($scope.bojap.loggedIn) {
     $scope.message = "Hello " + $scope.bojap.user.displayName;
   } else {
@@ -98,15 +113,11 @@ angular.module('app', ['ngRoute'])
     $scope.template = $scope.templates[template];
   };
 
-  $scope.template = $scope.templates.welcome;
+  $scope.template = $scope.templates[$route.current.$$route.originalPath.substring(1)] || $scope.templates.welcome;
 })
 
-.controller('Profile', function ($scope) {
-  if ($scope.bojap.loggedIn) {
-    $scope.profile = $scope.bojap.user;
-  } else {
-    $scope.profile = "Profile not found. Are you logged in?";
-  }
+.controller('Welcome', function ($scope) {
+
 })
 
 .controller('Message', function ($scope) {
@@ -123,14 +134,57 @@ angular.module('app', ['ngRoute'])
   $scope.reset = function () {
     $scope.input = angular.copy($scope.master);
   }
+
+  $scope.messages = [
+    {
+      _id: 123,
+      users: ["bob", "amy"],
+      subject: "Hello",
+      messages: [
+        {
+          sender: "bob",
+          messages: "hello",
+          timestamp: "1341231313"
+        },
+        {
+          sender: "amy",
+          messages: "yo",
+          timestamp: "1231412134"
+        }
+      ]
+    },
+    {
+      _id: 123,
+      users: ["sarah", "amy"],
+      subject: "Awesome Day Today",
+      messages: [
+        {
+          sender: "sarah",
+          messages: "omg wtf bbq~",
+          timestamp: "5856754754"
+        },
+        {
+          sender: "amy",
+          messages: "RIGHTTTT",
+          timestamp: "1795768686"
+        }
+      ]
+    }
+  ];
+})
+
+.controller('Profile', function ($scope) {
+  if ($scope.bojap.loggedIn) {
+    $scope.profile = $scope.bojap.user;
+  } else {
+    $scope.profile = "Profile not found. Are you logged in?";
+  }
+
+  $scope.input = angular.copy($scope.bojap.user)
 })
 
 .controller('Settings', function ($scope) {
-  if ($scope.bojap.loggedIn) {
-    $scope.settings = $scope.bojap.user;
-  } else {
-    $scope.settings = "Are you logged in?";
-  }
+
 })
 
 .controller('Feedback', function ($scope) {

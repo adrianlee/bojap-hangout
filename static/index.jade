@@ -9,7 +9,7 @@ html(ng-app='app')
     link(rel='stylesheet', href='css/bojap.css')
     
     script.
-      var bojap = window.bojap = {}
+      var bojap = window.bojap = {};
       bojap.loggedIn = !{loggedIn};
       bojap.user = !{user};
 
@@ -19,12 +19,14 @@ html(ng-app='app')
         span
       #menu
         .pure-menu.pure-menu-open
-          a.pure-menu-heading(href='/') Bojap
+          a.pure-menu-heading Bojap
           ul#nav
             li
-              a(href='#') Landing
+              a(href='#') Home
             li
               a(href='#hangout') Hangout
+            li
+              a(href='http://blog.bojap.com/') Blog
             //- li(ng-show="bojap.loggedIn")
               a(href='#settings') Settings
             li.menu-item-divided(ng-show="bojap.loggedIn")
@@ -34,10 +36,6 @@ html(ng-app='app')
 
     script(id='landing.html', type='text/ng-template')
       .content
-        //- .header
-          h1 Bojap
-          h2 Get help from tutors and study with others
-
         .content-subhead {{message}}
         p(ng-hide="bojap.loggedIn")
           a.pure-button.pure-button-success(href='/auth/google') Sign in with Google
@@ -45,31 +43,16 @@ html(ng-app='app')
           p
             .pure-menu.pure-menu-open.pure-menu-horizontal
               ul
-                li.pure-menu-selected
-                  a(href, ng-click="changeTemplate('welcome')") Welcome
                 li
-                  a(href, ng-click="changeTemplate('messages')") Messages
+                  a(href="#") Welcome
                 li
-                  a(href, ng-click="changeTemplate('profile')") Profile
+                  a(href="#messages") Messages
                 li
-                  a(href, ng-click="changeTemplate('settings')") Settings
+                  a(href="#profile") Profile
                 li
-                  a(href, ng-click="changeTemplate('feedback')") Support & Feedback
-
-          //- h2.content-header Home
-          //- p Tic Tail Step By Step
-
-          //- h2.content-header Private Messages
-          //- div(ng-include src="'messages.html'")
-
-          //- h2.content-header Profile
-          //- div(ng-include src="'profile.html'")
-
-          //- h2.content-header Settings
-          //- div(ng-include src="'settings.html'")
-
-          //- h2.content-header Support & Feedback
-          //- div(ng-include src="'feedback.html'")
+                  a(href="#settings") Settings
+                li
+                  a(href="#feedback") Support & Feedback
 
           div(ng-include src="template")
 
@@ -92,11 +75,13 @@ html(ng-app='app')
             tbody#list_rooms
 
     script(id="welcome.html", type='text/ng-template')
-      h2.content-header Home
-      p Tic Tail Step By Step
+      div(ng-controller="Welcome")
+        h2.content-header Welcome
+        p Tic Tail Step By Step
 
     script(id="messages.html", type='text/ng-template')
       div(ng-controller="Message")
+        h2.content-header Private Messages
         p
           a.pure-button.pure-button-success(onclick="$('#compose').toggle()") Create
         form.pure-form(id="compose", style="display: none;")
@@ -110,54 +95,61 @@ html(ng-app='app')
               a.pure-button.pure-button-primary(style="margin: .35em 0;", ng-click="send(input)") Send
 
         p
-          table.pure-table
+          table.pure-table.pure-table-horizontal
             thead
               tr
-                th Recipient
+                th To / From
+                th Subject
                 th Message
                 th Last reply
             tbody
-              tr.pure-table-odd
-                td Honda
-                td What is my mouse pad so small?
-                td 2009
-              tr
-                td Toyota
-                td When can you add zopim to this website
-                td 2012
-              tr.pure-table-odd
-                td Hyundai
-                td We need analytics! NOW!
-                td 2010
+              tr(ng-repeat='message in messages')
+                td {{message.users}}
+                td {{message.subject}}
+                td {{message.messages}}
+                td {{message.messages[message.messages.length-1].timestamp}}
+              //- tr
+              //-   td Toyota
+              //-   td When can you add zopim to this website
+              //-   td 2012
+              //- tr.pure-table-odd
+              //-   td Hyundai
+              //-   td We need analytics! NOW!
+              //-   td 2010
 
     script(id="profile.html", type='text/ng-template')
       div(ng-controller="Profile")
+        h2.content-header Profile
         //- p Do you want to learn or do you want to Teach?
 
         form.pure-form.pure-form-aligned
           fieldset
             .pure-control-group
               label(for='name') Name
-              input#name.pure-input-1-2(type='text', placeholder='Username', value="{{profile.displayName}}")
+              input#name.pure-input-1-2(type='text', placeholder='Username', ng-model="input.displayName")
             .pure-control-group
               label(for='email') Contact Email
-              input#email.pure-input-1-2(type='email', placeholder='Email Address', value="{{profile.emails[0].value}}")
+              input#email.pure-input-1-2(type='email', placeholder='Email Address', ng-model="input.email")
+            .pure-control-group
+              label(for="number") Contact Number
+              input#number.pure-input-1-2(type="number", min="9999999", max="99999999" placeholder="", ng-model="input.phone")
             .pure-control-group
               label(for="bio") Bio
               textarea#bio.pure-input-1-2(style="height: 120px;", placeholder="Tell others about yourself...", ng-model="input.body")
             .pure-controls
-              button.pure-button.pure-button-primary(type='submit') Save Changes
+              a.pure-button.pure-button-primary(ng-click="send(input)") Save Changes
 
          p {{profile}}
 
 
     script(id="settings.html", type='text/ng-template')
+      h2.content-header Settings
       p app settings
 
 
     script(id="feedback.html", type='text/ng-template')
       //- p Redirect to zendesk or other
-
+      h2.content-header Support & Feedback
       div(ng-controller="Feedback")
 
         form.pure-form(id="feedback")

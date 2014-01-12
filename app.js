@@ -79,10 +79,6 @@ process.on('uncaughtException', function (err) {
 /*
  *  ENDPOINTS
  */
-app.get('/', function (req, res) {
-  res.render('index');
-});
-
 app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email', "https://www.googleapis.com/auth/hangout.participants", "https://www.googleapis.com/auth/hangout.av", "https://www.googleapis.com/auth/plus.me"] }));
 app.get('/auth/google/callback', passport.authenticate('google', { successRedirect: '/', failureRedirect: '/?error=login fail' }));
 
@@ -153,6 +149,9 @@ app.get('/api/profile', function (req, res) {
   });
 });
 
+app.get('*', function (req, res) {
+  res.render('index');
+});
 
 /*
  *  Launch

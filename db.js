@@ -12,7 +12,7 @@ mongoose.connect(MONGOLAB_URI , function (err, res) {
 
 var UserSchema = {
   displayName: String,
-  emails: [{ value: String }],
+  email: String,
   googleId: String,
   google: {
     id: String,
