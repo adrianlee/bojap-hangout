@@ -10,25 +10,43 @@ mongoose.connect(MONGOLAB_URI , function (err, res) {
   }
 });
 
+var GoogleProviderSchema = {
+  id: String,
+  email: String,
+  verified_email: Boolean,
+  name: String,
+  given_name: String,
+  family_name: String,
+  link: String,
+  gender: String,
+  locale: String
+};
+
 var UserSchema = {
   displayName: String,
-  email: String,
-  googleId: String,
-  google: {
-    id: String,
-    email: String,
-    verified_email: Boolean,
-    name: String,
-    given_name: String,
-    family_name: String,
-    link: String,
-    gender: String,
-    locale: String
-  }
+  email: { type: String, select: false },
+  googleId: { type: String, select: false },
+  google:  { type: GoogleProviderSchema, select: false }
 };
 
 var UserModel = mongoose.model('User', UserSchema);
 
+var MessageSchema = {
+  users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  subject: String,
+  messages: [
+    {
+      sender: { type: mongoose.Schema.Types.ObjectId, rel: 'User' },
+      has_read: [{ type: mongoose.Schema.Types.ObjectId, rel: 'User' }],
+      message: String,
+      timestamp: { type: Date, default: Date.now }
+    }
+  ]
+};
+
+var MessageMoodel = mongoose.model('Message', MessageSchema);
+
 module.exports = {
-  User: UserModel
+  User: UserModel,
+  Message: MessageMoodel
 };

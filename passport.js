@@ -10,7 +10,7 @@ module.exports = function(passport) {
 
     console.log(profile);
 
-    db.User.findOne({ googleId: profile.id }, function (err, user) {
+    db.User.findOne({ googleId: profile.id }).select('+email +google +googleId').exec(function (err, user) {
       if (err) return done(err);
       
       console.log(user);
@@ -36,7 +36,7 @@ module.exports = function(passport) {
   passport.deserializeUser(function(id, done) {
     console.log("deserializeUser");
 
-    db.User.findOne({googleId: id}, function (err, profile) {
+    db.User.findOne({googleId: id}).select('+email +google +googleId').exec(function (err, profile) {
       // Error with db
       if (err) return done(err);
 

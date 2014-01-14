@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app', ['ngRoute'])
+angular.module('app', ['ngRoute', 'ngResource'])
 
 .config(function($routeProvider) {
   $routeProvider
@@ -120,57 +120,49 @@ angular.module('app', ['ngRoute'])
 
 })
 
-.controller('Message', function ($scope) {
+.controller('Message', function ($scope, $http) {
   $scope.master = {};
 
+  // Fetch Existing Messages
+  $scope.fetch = function () {
+    $http.get('/api/messages')
+    .success(function (d) {
+      console.log(d);
+      $scope.messages = angular.copy(d);
+    })
+    .error(function (d) {
+      console.log(d);
+    });
+  }
+
+  $scope.fetch();
+
+  // Compose Form Send
   $scope.send = function (input) {
     console.log(input);
 
-    // success
-    $('#compose').toggle();
-    $scope.reset();
+    $http.post('/api/messages', {
+      users: input.recipient,
+      subject: input.subject,
+      message: input.message
+    })
+    .success(function (d) {
+      console.log(d);
+
+      // success
+      $('#compose').toggle();
+      $scope.reset();
+    })
+    .error(function (d) {
+      console.log(d);
+    });
+
   };
 
+  // Compose Form Reset
   $scope.reset = function () {
     $scope.input = angular.copy($scope.master);
   }
-
-  $scope.messages = [
-    {
-      _id: 123,
-      users: ["bob", "amy"],
-      subject: "Hello",
-      messages: [
-        {
-          sender: "bob",
-          messages: "hello",
-          timestamp: "1341231313"
-        },
-        {
-          sender: "amy",
-          messages: "yo",
-          timestamp: "1231412134"
-        }
-      ]
-    },
-    {
-      _id: 123,
-      users: ["sarah", "amy"],
-      subject: "Awesome Day Today",
-      messages: [
-        {
-          sender: "sarah",
-          messages: "omg wtf bbq~",
-          timestamp: "5856754754"
-        },
-        {
-          sender: "amy",
-          messages: "RIGHTTTT",
-          timestamp: "1795768686"
-        }
-      ]
-    }
-  ];
 })
 
 .controller('Profile', function ($scope) {

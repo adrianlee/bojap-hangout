@@ -90,7 +90,7 @@ html(ng-app='app')
               input.pure-input-2-3(type="text", placeholder="Recipient", ng-model="input.recipient")
               input.pure-input-2-3(type="text", placeholder="Subject", ng-model="input.subject")
             .pure-group
-              textarea.pure-input-2-3(style="height: 120px;", placeholder="Your Message...", ng-model="input.body")
+              textarea.pure-input-2-3(style="height: 120px;", placeholder="Your Message...", ng-model="input.message")
             .pure-group
               a.pure-button.pure-button-primary(style="margin: .35em 0;", ng-click="send(input)") Send
 
@@ -106,16 +106,9 @@ html(ng-app='app')
               tr(ng-repeat='message in messages')
                 td {{message.users}}
                 td {{message.subject}}
-                td {{message.messages}}
-                td {{message.messages[message.messages.length-1].timestamp}}
-              //- tr
-              //-   td Toyota
-              //-   td When can you add zopim to this website
-              //-   td 2012
-              //- tr.pure-table-odd
-              //-   td Hyundai
-              //-   td We need analytics! NOW!
-              //-   td 2010
+                td {{message.messages[message.messages.length-1].message}}
+                td {{message.messages[message.messages.length-1].timestamp | date:'MM/dd/yyyy @ h:mma'}}
+
 
     script(id="profile.html", type='text/ng-template')
       div(ng-controller="Profile")
@@ -163,4 +156,6 @@ html(ng-app='app')
     script(type='text/javascript', src='js/jquery.js')
     script(type='text/javascript', src='js/angular.min.js')
     script(type='text/javascript', src='js/angular-route.min.js')
+    script(type='text/javascript', src='js/angular-resource.min.js')
+    script(type='text/javascript', src='js/moment-with-langs.min.js')
     script(type='text/javascript', src='js/bojap.js')
