@@ -1,6 +1,7 @@
-var app = require('./app');
-var api = require('./api');
-
-
-app.listen("8010");
-api.listen("8020");
+var express = require('express'); 
+var app = express(); 
+ 
+app
+.use(express.vhost('bojap.com', require('./app')))
+.use(express.vhost('bojap.com/api', require('./api')))
+.listen(process.env.PORT || process.argv[2] || 3000);

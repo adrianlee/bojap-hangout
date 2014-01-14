@@ -1,21 +1,35 @@
 var redis = require('redis');
 
-module.exports = function() {
-  var redisClient = redis.createClient(6379, "bojap.com");
+var main = redis.createClient(6379, "bojap.com");
 
-  redisClient.auth("bojappassword", function() {
-    console.log('Redis client connected');
-  });
+main.auth("bojappassword", function() {
+  console.log('Redis client connected');
+});
 
-  redisClient.select(1, function() {
-    console.log("Redis database 1 selected")
-  });
+main.select(1, function() {
+  console.log("Redis database 1 selected")
+});
 
-  redisClient.on("error", function(err) {
-    console.log("Error " + err);
-  });
+main.on("error", function(err) {
+  console.log("Error " + err);
+});
 
-  return {
-    client: redisClient
-  }
+var auth = redis.createClient(6379, "bojap.com");
+
+auth.auth("bojappassword", function() {
+  console.log('Redis client connected');
+});
+
+auth.select(2, function() {
+  console.log("Redis database 2 selected")
+});
+
+auth.on("error", function(err) {
+  console.log("Error " + err);
+});
+
+module.exports = {
+  print: redis.print,
+  main: main,
+  auth: auth
 };

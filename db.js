@@ -25,7 +25,6 @@ var GoogleProviderSchema = {
 var UserSchema = {
   displayName: String,
   email: { type: String, select: false },
-  googleId: { type: String, select: false },
   google:  { type: GoogleProviderSchema, select: false }
 };
 
