@@ -1,27 +1,44 @@
 var redis = require('redis');
 
-var main = redis.createClient(6379, "bojap.com");
+function getSuperParent(current) {
+	if (!current.parent) {
+		return current;
+	} else {
+		return getSuperParent(current.parent);
+	}
+}
 
-main.auth("bojappassword", function() {
-  console.log('Redis client connected');
-});
+function isApi() {
+	return (getSuperParent(module).filename.indexOf('api.js') != -1);
+}
 
-main.select(1, function() {
-  console.log("Redis database 1 selected")
-});
+// Only API server needs to access the MAIN redis server
+if (isApi()) {
+	// Storing Hangout Sessions
+	var main = redis.createClient(6379, "bojap.com");
 
-main.on("error", function(err) {
-  console.log("Error " + err);
-});
+	main.auth("bojappassword", function() {
+	  console.log('Main Redis client connected');
+	});
 
+	main.select(1, function() {
+	  console.log("Main Redis database 1 selected")
+	});
+
+	main.on("error", function(err) {
+	  console.log("Error " + err);
+	});
+}
+
+// Storing authentication token
 var auth = redis.createClient(6379, "bojap.com");
 
 auth.auth("bojappassword", function() {
-  console.log('Redis client connected');
+  console.log('Authentication Redis client connected');
 });
 
 auth.select(2, function() {
-  console.log("Redis database 2 selected")
+  console.log("Authentication Redis database 2 selected")
 });
 
 auth.on("error", function(err) {
