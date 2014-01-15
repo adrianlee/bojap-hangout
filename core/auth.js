@@ -1,13 +1,13 @@
-var jwt = require('jwt-simple');
-var secret = "omg wtf bbq bojap ftw awesome legit";
-
 var redisAuth = require('./redis').auth;
+var jwt = require('jwt-simple');
 
-var encode = function (payload) {
+var SECRET = "omg wtf bbq bojap ftw awesome legit";
+
+function encode(payload) {
   var token;
 
   try {
-    token = jwt.encode(payload, secret);
+    token = jwt.encode(payload, SECRET);
   } catch (e) {
     return;
   }
@@ -19,11 +19,11 @@ var encode = function (payload) {
   return token;
 };
 
-var decode = function (token, cb) {
+function decode(token, cb) {
   var payload;
 
   try {
-    payload = jwt.decode(token, secret);
+    payload = jwt.decode(token, SECRET);
   } catch (e) {
     return cb(e);
   }
