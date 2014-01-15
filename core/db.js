@@ -1,12 +1,11 @@
 var mongoose = require('mongoose');
+var config = require('../config');
 
-var MONGOLAB_URI  = "mongodb://adrian:mongopassword@paulo.mongohq.com:10045/hangout";
-
-mongoose.connect(MONGOLAB_URI , function (err, res) {
+mongoose.connect(config.mongohqURI, function (err, res) {
   if (err) {
-    console.log ('ERROR connecting to: ' + MONGOLAB_URI + '. ' + err);
+    console.log ('ERROR connecting to: ' + config.mongohqURI + '. ' + err);
   } else {
-    console.log ('Succeeded connected to: ' + MONGOLAB_URI);
+    console.log ('Succeeded connected to: ' + config.mongohqURI);
   }
 });
 

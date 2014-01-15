@@ -1,4 +1,5 @@
 var redis = require('redis');
+var config = require('../config');
 
 function getSuperParent(current) {
 	if (!current.parent) {
@@ -15,9 +16,9 @@ function isApi() {
 // Only API server needs to access the MAIN redis server
 if (isApi()) {
 	// Storing Hangout Sessions
-	var main = redis.createClient(6379, "bojap.com");
+	var main = redis.createClient(config.redis.port, config.redis.host);
 
-	main.auth("bojappassword", function() {
+	main.auth(config.redis.pass, function() {
 	  console.log('Main Redis client connected');
 	});
 
@@ -31,9 +32,9 @@ if (isApi()) {
 }
 
 // Storing authentication token
-var auth = redis.createClient(6379, "bojap.com");
+var auth = redis.createClient(config.redis.port, config.redis.host);
 
-auth.auth("bojappassword", function() {
+auth.auth(config.redis.pass, function() {
   console.log('Authentication Redis client connected');
 });
 

@@ -1,6 +1,7 @@
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 var db = require('./db');
+var config = require('../config');
 
 module.exports = function(passport) {
 
@@ -8,11 +9,7 @@ module.exports = function(passport) {
    * Passport Google Strategy
    * Create or Fetch user account. Save user and token to Redis for REST API.
    */
-  passport.use(new GoogleStrategy({
-      clientID: "692122391406-gjftvker6cnq0ab54fd7jq9h7popfn76.apps.googleusercontent.com",
-      clientSecret: 'uPo1RwT95KrFgfczCL3VXTZ3',
-      callbackURL: "http://app.bojap.com/auth/google/callback"
-    },
+  passport.use(new GoogleStrategy(config.GoogleStrategy,
     function(token, refreshToken, profile, done) {
       process.nextTick(function() {
 

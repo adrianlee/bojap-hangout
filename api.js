@@ -1,3 +1,4 @@
 var api = require('./api/');
+var config = require('./config');
 
-api.listen(8011);
+api.listen(config.api.port);
