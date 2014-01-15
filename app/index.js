@@ -57,9 +57,7 @@ app.configure(function() {
 });
 
 
-/*
- *  Authentication
- */
+// Google OAuth
 app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email', "https://www.googleapis.com/auth/hangout.participants", "https://www.googleapis.com/auth/hangout.av", "https://www.googleapis.com/auth/plus.me"] }));
 app.get('/auth/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/?error=login failed' }), function (req, res) {
   var authToken = auth.getToken({ user: req.user.user, google_token: req.user.token });
@@ -67,6 +65,15 @@ app.get('/auth/google/callback', passport.authenticate('google', { session: fals
     res.send(500, "Unable to generate auth token")
   }
   res.redirect('/?' + require('querystring').stringify({ user: req.user.user.id, token: authToken }))
+});
+
+// Health
+app.get('/health', function (req, res) {
+  res.send({
+    pid: process.pid,
+    memory: process.memoryUsage(),
+    uptime: process.uptime()
+  })
 });
 
 /*
