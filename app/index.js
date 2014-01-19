@@ -64,7 +64,7 @@ app.get('/auth/google/callback', passport.authenticate('google', { session: fals
   if (!authToken) {
     res.send(500, "Unable to generate auth token")
   }
-  res.redirect('/?' + require('querystring').stringify({ user: req.user.user.id, token: authToken }))
+  res.redirect('/#/?' + require('querystring').stringify({ user: req.user.user.id, token: authToken }))
 });
 
 // Health

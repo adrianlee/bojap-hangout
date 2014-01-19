@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="app">
+<html ng-app="bojap">
   <head>
     <title>Bojap</title>
     <meta name="viewport" content="width=device-width, initial-scale=0.7, maximum-scale=0.7, user-scalable=yes">
@@ -16,17 +16,29 @@
             <li><a href="#">Home</a></li>
             <li><a href="#hangout">Hangout</a></li>
             <li><a href="http://blog.bojap.com/">Blog</a></li>
-            <li ng-show="bojap.loggedIn" class="menu-item-divided"><a href="/logout">Logout</a></li>
+            <li ng-show="loggedIn()" class="menu-item-divided"><a href="#logout">Logout</a></li>
           </ul>
         </div>
       </div>
       <div id="main" ng-view="ng-view"></div>
     </div>
+
+    <script id="login.html" type="text/ng-template">
+      <div class="content">
+        <div class="content-subhead">{{message}}</div>
+        <p><a href="/auth/google" class="pure-button pure-button-success">Sign in with Google</a></p>
+        <p><a class="pure-button" ng-click="login()">Login</a>
+      </div>
+    </script>
+
+    <script id="logout.html" type="text/ng-template">
+
+    </script>
+
     <script id="landing.html" type="text/ng-template">
       <div class="content">
         <div class="content-subhead">{{message}}</div>
-        <p ng-hide="bojap.loggedIn"><a href="/auth/google" class="pure-button pure-button-success">Sign in with Google</a></p>
-        <div ng-show="bojap.loggedIn">
+        <div>
           <p>
             <div class="pure-menu pure-menu-open pure-menu-horizontal">
               <ul>
@@ -42,6 +54,7 @@
         </div>
       </div>
     </script>
+
     <script id="hangout.html" type="text/ng-template">
       <div class="content">
         <div class="content-subhead">Create a Room</div>
@@ -64,12 +77,14 @@
         </p>
       </div>
     </script>
+
     <script id="welcome.html" type="text/ng-template">
       <div ng-controller="Welcome">
         <h2 class="content-header">Welcome</h2>
         <p>Tic Tail Step By Step</p>
       </div>
     </script>
+
     <script id="messages.html" type="text/ng-template">
       <div ng-controller="Message">
         <h2 class="content-header">Private Messages</h2>
@@ -108,6 +123,7 @@
         </p>
       </div>
     </script>
+
     <script id="profile.html" type="text/ng-template">
       <div ng-controller="Profile">
         <h2 class="content-header">Profile</h2>
@@ -135,10 +151,12 @@
         <p>{{profile}}</p>
       </div>
     </script>
+
     <script id="settings.html" type="text/ng-template">
       <h2 class="content-header">Settings</h2>
       <p>app settings</p>
     </script>
+
     <script id="feedback.html" type="text/ng-template">
       <h2 class="content-header">Support & Feedback</h2>
       <div ng-controller="Feedback">
@@ -152,12 +170,27 @@
         </form>
       </div>
     </script>
+
     <script type="text/javascript" src="https://apis.google.com/js/platform.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/angular.min.js"></script>
     <script type="text/javascript" src="js/angular-route.min.js"></script>
     <script type="text/javascript" src="js/angular-resource.min.js"></script>
     <script type="text/javascript" src="js/moment-with-langs.min.js"></script>
+    <script type="text/javascript" src="js/faye-browser-min.js"></script>
     <script type="text/javascript" src="app/bojap.js"></script>
+    <script>
+      var client = new Faye.Client('http://api.bojap.com/faye');
+
+      client.disable('websocket');
+
+      client.subscribe('/messages', function(message) {
+        alert('Got a message: ' + message.text);
+      });
+
+      client.publish('/messages', {
+        text: 'Hello world'
+      });
+    </script>
   </body>
 </html>

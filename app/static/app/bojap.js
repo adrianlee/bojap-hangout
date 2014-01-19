@@ -1,8 +1,9 @@
 'use strict';
 
-angular.module('app', ['ngRoute', 'ngResource'])
+angular.module('bojap', ['ngRoute', 'ngResource'])
 
 .config(function($routeProvider) {
+
   $routeProvider
     .when('/', {
       controller: 'Landing',
@@ -18,24 +19,76 @@ angular.module('app', ['ngRoute', 'ngResource'])
     })
     .when('/profile', {
       controller: 'Landing',
-      templateUrl: 'landing.html',
+      templateUrl: 'landing.html'
     })
     .when('/settings', {
       controller: 'Landing',
-      templateUrl: 'landing.html',
+      templateUrl: 'landing.html'
     })
     .when('/feedback', {
       controller: 'Landing',
-      templateUrl: 'landing.html',
+      templateUrl: 'landing.html'
+    })
+    .when('/login', {
+      controller: 'Login',
+      templateUrl: 'login.html'
+    })
+    .when('/logout', {
+      controller: 'Logout',
+      templateUrl: 'logout.html'
     })
     .otherwise({
-      redirectTo:'/'
+      redirectTo: '/'
     });
 })
 
-.controller('Main', function ($scope) {
-  // Fetch server passed object
-  $scope.bojap = window.bojap;
+.run(function ($rootScope, $location, User) {
+  $rootScope.$on('$locationChangeStart', function (event, next, current) {
+    if ($location.$$search && $location.$$search.token && $location.$$search.user) {
+      User.login($location.$$search.user, $location.$$search.token);
+      $location.$$search = {};
+    }
+
+    if (!User.isAuthenticated && next.templateUrl == "logout.html") {
+      return $location.path('/');
+    }
+
+    if (!User.isAuthenticated() && next.templateUrl != "login.html") {
+      return $location.path('/login');
+    }
+  });
+})
+
+.factory('User', function() {
+  var self = this;
+  this.authenticated = false;
+  this.token = null;
+  this.user = null;
+  return {
+    isAuthenticated: function() {
+      return self.authenticated;
+    },
+    getName: function () {
+      return self.name;
+    },
+    login: function(user, token) {
+      self.user = user;
+      self.token = token;
+      self.authenticated = true;
+      return true;
+    },
+    logout: function () {
+      if (self.authenticated) {
+        self.authenticated = false;
+        return true;
+      }
+      return false;
+    }
+  }
+})
+
+.controller('Main', function ($scope, $location, User) {
+  $scope.loggedIn = User.isAuthenticated;
 
   // Side Menu
   $(function() {
@@ -59,6 +112,24 @@ angular.module('app', ['ngRoute', 'ngResource'])
   });
 })
 
+.controller('Login', function ($scope, $location, User) {
+  $scope.message = 'Hello Anonymous, Please Log in';
+
+  $scope.login = function () {
+    console.log("loggin user in");
+    if (User.login()) {
+      $location.path('/');
+    }
+  }
+})
+
+.controller('Logout', function ($location, User) {
+  console.log("logging user out");
+  if (User.logout()) {
+    $location.path('/');
+  }
+})
+
 .controller('Hangout', function ($scope) {
   $(function () {
       gapi.hangout.render('start_hangout', {
@@ -74,7 +145,8 @@ angular.module('app', ['ngRoute', 'ngResource'])
   setInterval(fetchRooms, 10000);
 
   function fetchRooms() {
-    $.get("/api/rooms", function (data) {
+    $.get("http://api.bojap.com/rooms", function (data) {
+      if (!data) return false;
       // console.log("rooms online: " + data.length);
       var list = document.getElementById("list_rooms");
       var html = "";
@@ -95,11 +167,7 @@ angular.module('app', ['ngRoute', 'ngResource'])
 })
 
 .controller('Landing', function ($scope, $route) {
-  if ($scope.bojap.loggedIn) {
-    $scope.message = "Hello " + $scope.bojap.user.displayName;
-  } else {
-    $scope.message = 'Hello Anonymous, Please Log in';
-  }
+  $scope.message = "Hello User";
 
   $scope.templates = {
     welcome: "welcome.html",
@@ -125,7 +193,7 @@ angular.module('app', ['ngRoute', 'ngResource'])
 
   // Fetch Existing Messages
   $scope.fetch = function () {
-    $http.get('/api/messages')
+    $http.get('http://api.bojap.com/messages')
     .success(function (d) {
       console.log(d);
       $scope.messages = angular.copy(d);
@@ -141,7 +209,7 @@ angular.module('app', ['ngRoute', 'ngResource'])
   $scope.send = function (input) {
     console.log(input);
 
-    $http.post('/api/messages', {
+    $http.post('http://api.bojap.com/messages', {
       users: input.recipient,
       subject: input.subject,
       message: input.message
@@ -166,13 +234,13 @@ angular.module('app', ['ngRoute', 'ngResource'])
 })
 
 .controller('Profile', function ($scope) {
-  if ($scope.bojap.loggedIn) {
-    $scope.profile = $scope.bojap.user;
+  if ($scope.loggedIn()) {
+    $scope.profile = "User"
   } else {
     $scope.profile = "Profile not found. Are you logged in?";
   }
 
-  $scope.input = angular.copy($scope.bojap.user)
+  // $scope.input = angular.copy($scope.bojap.user)
 })
 
 .controller('Settings', function ($scope) {
