@@ -3,6 +3,10 @@ body {
   font-family: 'Lato', sans-serif;
 }
 
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+display: none !important;
+}
+
 /*
 Add transition to containers so they can push in and out.
 */

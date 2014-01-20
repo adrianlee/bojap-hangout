@@ -3,43 +3,16 @@
 angular.module('bojap', ['ngRoute', 'ngResource'])
 
 .config(function($routeProvider) {
-
   $routeProvider
-    .when('/', {
-      controller: 'Landing',
-      templateUrl: 'landing.html'
-    })
-    .when('/hangout', {
-      controller: 'Hangout',
-      templateUrl: 'hangout.html'
-    })
-    .when('/messages', {
-      controller: 'Landing',
-      templateUrl: 'landing.html'
-    })
-    .when('/profile', {
-      controller: 'Landing',
-      templateUrl: 'landing.html'
-    })
-    .when('/settings', {
-      controller: 'Landing',
-      templateUrl: 'landing.html'
-    })
-    .when('/feedback', {
-      controller: 'Landing',
-      templateUrl: 'landing.html'
-    })
-    .when('/login', {
-      controller: 'Login',
-      templateUrl: 'login.html'
-    })
-    .when('/logout', {
-      controller: 'Logout',
-      templateUrl: 'logout.html'
-    })
-    .otherwise({
-      redirectTo: '/'
-    });
+    .when('/', { controller: 'Landing', templateUrl: 'landing.html' })
+    .when('/hangout', { controller: 'Hangout', templateUrl: 'hangout.html' })
+    .when('/messages', { controller: 'Landing', templateUrl: 'landing.html' })
+    .when('/profile', { controller: 'Landing', templateUrl: 'landing.html' })
+    .when('/settings', { controller: 'Landing', templateUrl: 'landing.html' })
+    .when('/feedback', { controller: 'Landing', templateUrl: 'landing.html' })
+    .when('/login', { controller: 'Login', templateUrl: 'login.html' })
+    .when('/logout', { controller: 'Logout', templateUrl: 'logout.html' })
+    .otherwise({ redirectTo: '/' });
 })
 
 .run(function ($rootScope, $location, User) {
@@ -47,6 +20,7 @@ angular.module('bojap', ['ngRoute', 'ngResource'])
     if ($location.$$search && $location.$$search.token && $location.$$search.user) {
       User.login($location.$$search.user, $location.$$search.token);
       $location.$$search = {};
+      $location.path(next.split('?')[0]);
     }
 
     if (!User.isAuthenticated && next.templateUrl == "logout.html") {
@@ -62,8 +36,8 @@ angular.module('bojap', ['ngRoute', 'ngResource'])
 .factory('User', function() {
   var self = this;
   this.authenticated = false;
-  this.token = null;
   this.user = null;
+  this.token = null;
   return {
     isAuthenticated: function() {
       return self.authenticated;
@@ -78,6 +52,8 @@ angular.module('bojap', ['ngRoute', 'ngResource'])
       return true;
     },
     logout: function () {
+      self.user = null;
+      self.token = null;
       if (self.authenticated) {
         self.authenticated = false;
         return true;
@@ -87,8 +63,26 @@ angular.module('bojap', ['ngRoute', 'ngResource'])
   }
 })
 
-.controller('Main', function ($scope, $location, User) {
+.factory('Faye', function () {
+  var self = this;
+  var client = new Faye.Client('http://api.bojap.com/faye');
+  client.disable('websocket');
+
+  return {
+    client: client
+  }
+})
+
+.controller('Main', function ($scope, $location, User, Faye) {
   $scope.loggedIn = User.isAuthenticated;
+
+  Faye.client.subscribe('/messages', function(message) {
+    alert('Got a message: ' + message.text);
+  });
+
+  if ($scope.loggedIn) {
+    console.log(User.isAuthenticated());
+  }
 
   // Side Menu
   $(function() {
@@ -114,13 +108,6 @@ angular.module('bojap', ['ngRoute', 'ngResource'])
 
 .controller('Login', function ($scope, $location, User) {
   $scope.message = 'Hello Anonymous, Please Log in';
-
-  $scope.login = function () {
-    console.log("loggin user in");
-    if (User.login()) {
-      $location.path('/');
-    }
-  }
 })
 
 .controller('Logout', function ($location, User) {
@@ -167,6 +154,7 @@ angular.module('bojap', ['ngRoute', 'ngResource'])
 })
 
 .controller('Landing', function ($scope, $route) {
+
   $scope.message = "Hello User";
 
   $scope.templates = {
@@ -184,8 +172,15 @@ angular.module('bojap', ['ngRoute', 'ngResource'])
   $scope.template = $scope.templates[$route.current.$$route.originalPath.substring(1)] || $scope.templates.welcome;
 })
 
-.controller('Welcome', function ($scope) {
+.controller('Welcome', function ($scope, Faye) {
+  $scope.message = {};
 
+  $scope.send = function (message) {
+    Faye.client.publish('/' + message.channel, {
+      sender: '123',
+      text: message.data
+    });
+  }
 })
 
 .controller('Message', function ($scope, $http) {

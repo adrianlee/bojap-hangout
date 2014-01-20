@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="css/bojap.css">
 
   </head>
-  <body ng-controller="Main">
+  <body ng-controller="Main" class="ng-cloak">
     <div id="layout"><a id="menuLink" href class="menu-link"><span></span></a>
       <div id="menu">
         <div class="pure-menu pure-menu-open"><a class="pure-menu-heading">Bojap</a>
           <ul id="nav">
             <li><a href="#">Home</a></li>
-            <li><a href="#hangout">Hangout</a></li>
+            <li ng-show="loggedIn()"><a href="#hangout">Hangout</a></li>
             <li><a href="http://blog.bojap.com/">Blog</a></li>
             <li ng-show="loggedIn()" class="menu-item-divided"><a href="#logout">Logout</a></li>
           </ul>
@@ -27,12 +27,11 @@
       <div class="content">
         <div class="content-subhead">{{message}}</div>
         <p><a href="/auth/google" class="pure-button pure-button-success">Sign in with Google</a></p>
-        <p><a class="pure-button" ng-click="login()">Login</a>
       </div>
     </script>
 
     <script id="logout.html" type="text/ng-template">
-
+      Logging out
     </script>
 
     <script id="landing.html" type="text/ng-template">
@@ -82,6 +81,11 @@
       <div ng-controller="Welcome">
         <h2 class="content-header">Welcome</h2>
         <p>Tic Tail Step By Step</p>
+        <p>
+          <form>
+            <input ng-model="message.channel" placeholder="channel"></input>
+            <input ng-model="message.data" placeholder="data"></input>
+            <a ng-click="send(message);">Send</a>
       </div>
     </script>
 
@@ -180,17 +184,7 @@
     <script type="text/javascript" src="js/faye-browser-min.js"></script>
     <script type="text/javascript" src="app/bojap.js"></script>
     <script>
-      var client = new Faye.Client('http://api.bojap.com/faye');
 
-      client.disable('websocket');
-
-      client.subscribe('/messages', function(message) {
-        alert('Got a message: ' + message.text);
-      });
-
-      client.publish('/messages', {
-        text: 'Hello world'
-      });
     </script>
   </body>
 </html>

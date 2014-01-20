@@ -13,7 +13,7 @@ var faye = require('faye');
 var bayeux = new faye.NodeAdapter({mount: '/faye', timeout: 45});
 
 bayeux.on('handshake', function(clientId) {
-  console.log("handshake:" + ":" + clientId);
+  console.log("handshake" + ":" + clientId);
 });
 
 bayeux.on('subscribe', function(clientId, channel) {
@@ -25,7 +25,7 @@ bayeux.on('unsubscribe', function(clientId, channel) {
 });
 
 bayeux.on('publish', function(clientId, channel, data) {
-  console.log("publish:" + clientId + ":" + channel + ":" + data);
+  console.log("publish:" + clientId + ":" + channel + ":" + JSON.stringify(data));
 });
 
 bayeux.on('disconnect', function(clientId) {
