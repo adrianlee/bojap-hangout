@@ -47,7 +47,7 @@ module.exports = function (server) {
       console.log(msgToken);
 
       // Add an error if the tokens don't match
-      if ("rt6utrb2" !== msgToken)
+      if ("rt6utrb" !== msgToken)
         message.error = 'Invalid subscription auth token';
 
       // Call the server back now we're done
@@ -55,18 +55,37 @@ module.exports = function (server) {
     }
   };
 
+  var filter = {
+    incoming: function(message, callback) {
+      console.log("incoming");
+      console.log(message);
 
-
-  bayeux.addExtension({
-    incoming: function(message, request, callback) {
-      // console.log(request && request.headers.origin);
-      // console.log(request && request.headers.host);
-      if (request && request.headers.host !== 'api2s') {
-        message.error = '403::Forbidden origin';
+      if (message.channel == '/notifications/public') {
+        return callback(message);
       }
+
+      message.error = 'stop';
+
+      callback(message); 
+    },
+    outgoing: function(message, callback) {
+      console.log("outgoing");
+      console.log(message);
       callback(message);
     }
-  });
+  };
+
+  // bayeux.addExtension({
+  //   incoming: function(message, request, callback) {
+  //     // console.log(request && request.headers.origin);
+  //     // console.log(request && request.headers.host);
+  //     if (request && request.headers.host !== 'api') {
+  //       message.error = '403::Forbidden origin';
+  //     }
+  //     callback(message);
+  //   }
+  // });
 
   bayeux.addExtension(serverAuth);
+  //bayeux.addExtension(filter);
 };

@@ -69,10 +69,17 @@ angular.module('bojap', ['ngRoute', 'ngResource'])
   var self = this;
 
   var client = new Faye.Client('http://api.bojap.com/faye');
-  client.disable('websocket');
+  // client.disable('websocket');
 
   var clientAuth = {
+    incoming: function (message, callback) {
+      console.log("client incoming:");
+      console.log(message);
+      callback(message);
+    },
     outgoing: function(message, callback) {
+      console.log("client outgoing:");
+      console.log(message);
       // Again, leave non-subscribe messages alone
       if (message.channel !== '/meta/subscribe')
         return callback(message);
