@@ -35,9 +35,11 @@ angular.module('bojap', ['ngRoute', 'ngResource'])
 
 .factory('User', function() {
   var self = this;
+
   this.authenticated = false;
   this.user = null;
   this.token = null;
+
   return {
     isAuthenticated: function() {
       return self.authenticated;
@@ -65,8 +67,28 @@ angular.module('bojap', ['ngRoute', 'ngResource'])
 
 .factory('Faye', function () {
   var self = this;
+
   var client = new Faye.Client('http://api.bojap.com/faye');
   client.disable('websocket');
+
+  var clientAuth = {
+    outgoing: function(message, callback) {
+      // Again, leave non-subscribe messages alone
+      if (message.channel !== '/meta/subscribe')
+        return callback(message);
+
+      // Add ext field if it's not present
+      if (!message.ext) message.ext = {};
+
+      // Set the auth token
+      message.ext.authToken = 'rt6utrb';
+
+      // Carry on and send the message to the server
+      callback(message);
+    }
+  };
+
+  client.addExtension(clientAuth);
 
   return {
     client: client
@@ -75,10 +97,6 @@ angular.module('bojap', ['ngRoute', 'ngResource'])
 
 .controller('Main', function ($scope, $location, User, Faye) {
   $scope.loggedIn = User.isAuthenticated;
-
-  Faye.client.subscribe('/messages', function(message) {
-    alert('Got a message: ' + message.text);
-  });
 
   if ($scope.loggedIn) {
     console.log(User.isAuthenticated());
@@ -154,7 +172,6 @@ angular.module('bojap', ['ngRoute', 'ngResource'])
 })
 
 .controller('Landing', function ($scope, $route) {
-
   $scope.message = "Hello User";
 
   $scope.templates = {
@@ -173,6 +190,14 @@ angular.module('bojap', ['ngRoute', 'ngResource'])
 })
 
 .controller('Welcome', function ($scope, Faye) {
+  Faye.client.subscribe('/notifications/public', function(message) {
+    console.log('/notifications/public: ' + message.text);
+  });
+
+  Faye.client.subscribe('/notifications/private/123', function(message) {
+    alert('/notifications/private/123: ' + message.text);
+  });
+
   $scope.message = {};
 
   $scope.send = function (message) {

@@ -8,31 +8,7 @@ var hangout = require('./hangout');
 var profile = require('./profile');
 var messages = require('./messages');
 var middleware = require('./middleware');
-
-var faye = require('faye');
-var bayeux = new faye.NodeAdapter({mount: '/faye', timeout: 45});
-
-bayeux.on('handshake', function(clientId) {
-  console.log("handshake" + ":" + clientId);
-});
-
-bayeux.on('subscribe', function(clientId, channel) {
-  console.log("subscribe:" + clientId + ":" + channel);
-});
-
-bayeux.on('unsubscribe', function(clientId, channel) {
-  console.log("unsubscribe:" + clientId + ":" + channel);
-});
-
-bayeux.on('publish', function(clientId, channel, data) {
-  console.log("publish:" + clientId + ":" + channel + ":" + JSON.stringify(data));
-});
-
-bayeux.on('disconnect', function(clientId) {
-  console.log("disconnect:" + clientId);
-});
-
-bayeux.attach(server);
+var faye = require('./faye')(server);
 
 /*
  * Middleware
