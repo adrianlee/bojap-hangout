@@ -14,7 +14,9 @@
         <div class="pure-menu pure-menu-open"><a class="pure-menu-heading">Bojap</a>
           <ul id="nav">
             <li><a href="#">Home</a></li>
-            <li ng-show="loggedIn()"><a href="#hangout">Hangout</a></li>
+            <li ng-show="loggedIn()"><a href="#messages">Messages</a></li>
+            <li ng-show="loggedIn()"><a href="#profile">Profile</a></li>
+            <!-- <li ng-show="loggedIn()"><a href="#hangout">Hangout</a></li> -->
             <li><a href="http://blog.bojap.com/">Blog</a></li>
             <li ng-show="loggedIn()" class="menu-item-divided"><a href="#logout">Logout</a></li>
           </ul>
@@ -25,8 +27,33 @@
 
     <script id="login.html" type="text/ng-template">
       <div class="content">
-        <div class="content-subhead">{{message}}</div>
-        <p><a href="/auth/google" class="pure-button pure-button-success">Sign in with Google</a></p>
+        <div class="content-subhead">Log in</div>
+        <p>
+          <form class="pure-form">
+            <fieldset class="pure-group">
+                <input type="email" class="pure-input-1-2" placeholder="Email" ng-model="login.email">
+                <input type="password" class="pure-input-1-2" placeholder="Password" ng-model="login.password">
+            </fieldset>
+
+            <button type="submit" class="pure-button pure-input-1-2 pure-button-primary">Log in</button>
+          </form>
+        </p>
+
+        or
+
+        <p><a href="/auth/google" class="pure-button pure-button-success">Log in with Google</a></p>
+
+        <div class="content-subhead">Get started, it is Free!</div>
+        <p>
+          <form class="pure-form">
+            <fieldset>
+                <input type="text" placeholder="Name" ng-model="signup.name">
+                <input type="email" placeholder="Email" ng-model="signup.email">
+                <input type="password" placeholder="Password" ng-model="signup.password">
+                <button type="submit" class="pure-button pure-button-primary" ng-click="signup(signup)">Get started!</button>
+            </fieldset>
+          </form>
+        </p>
       </div>
     </script>
 
@@ -36,21 +63,7 @@
 
     <script id="landing.html" type="text/ng-template">
       <div class="content">
-        <div class="content-subhead">{{message}}</div>
-        <div>
-          <p>
-            <div class="pure-menu pure-menu-open pure-menu-horizontal">
-              <ul>
-                <li><a href="#">Welcome</a></li>
-                <li><a href="#messages">Messages</a></li>
-                <li><a href="#profile">Profile</a></li>
-                <li><a href="#settings">Settings</a></li>
-                <li><a href="#feedback">Support & Feedback</a></li>
-              </ul>
-            </div>
-          </p>
           <div ng-include src="template"></div>
-        </div>
       </div>
     </script>
 
@@ -80,12 +93,17 @@
     <script id="welcome.html" type="text/ng-template">
       <div ng-controller="Welcome">
         <h2 class="content-header">Welcome</h2>
-        <p>Tic Tail Step By Step</p>
+
+
+        <!--
         <p>
           <form>
             <input ng-model="message.channel" placeholder="channel"></input>
             <input ng-model="message.data" placeholder="data"></input>
             <a ng-click="send(message);">Send</a>
+          </form>
+        </p>
+        -->
       </div>
     </script>
 
@@ -152,26 +170,6 @@
             <div class="pure-controls"><a ng-click="send(input)" class="pure-button pure-button-primary">Save Changes</a></div>
           </fieldset>
         </form>
-        <p>{{profile}}</p>
-      </div>
-    </script>
-
-    <script id="settings.html" type="text/ng-template">
-      <h2 class="content-header">Settings</h2>
-      <p>app settings</p>
-    </script>
-
-    <script id="feedback.html" type="text/ng-template">
-      <h2 class="content-header">Support & Feedback</h2>
-      <div ng-controller="Feedback">
-        <form id="feedback" class="pure-form">
-          <fieldset>
-            <div class="pure-group">
-              <textarea style="height: 120px;" placeholder="Need help or have suggestions?" ng-model="feedback.body" class="pure-input-2-3"></textarea>
-            </div>
-            <div class="pure-group"><a style="margin: .35em 0;" ng-click="send(feedback)" class="pure-button pure-button-primary">Send</a></div>
-          </fieldset>
-        </form>
       </div>
     </script>
 
@@ -183,6 +181,8 @@
     <script type="text/javascript" src="js/moment-with-langs.min.js"></script>
     <script type="text/javascript" src="js/faye-browser-min.js"></script>
     <script type="text/javascript" src="app/bojap.js"></script>
+    <script type="text/javascript" src="app/factory.js"></script>
+    <script type="text/javascript" src="app/controller.js"></script>
     <script>
 
     </script>

@@ -24,15 +24,6 @@ bayeux.on('disconnect', function(clientId) {
 module.exports = function (server) {
   bayeux.attach(server);
 
-  function send() {
-    bayeux.getClient().publish('/notifications/public', {
-      text: new Date().getTime()
-    });
-  }
-
-  send();
-  setInterval(send, 10000);
-
   var serverAuth = {
     incoming: function(message, callback) {
       // Let non-subscribe messages through
@@ -55,37 +46,5 @@ module.exports = function (server) {
     }
   };
 
-  var filter = {
-    incoming: function(message, callback) {
-      console.log("incoming");
-      console.log(message);
-
-      if (message.channel == '/notifications/public') {
-        return callback(message);
-      }
-
-      message.error = 'stop';
-
-      callback(message); 
-    },
-    outgoing: function(message, callback) {
-      console.log("outgoing");
-      console.log(message);
-      callback(message);
-    }
-  };
-
-  // bayeux.addExtension({
-  //   incoming: function(message, request, callback) {
-  //     // console.log(request && request.headers.origin);
-  //     // console.log(request && request.headers.host);
-  //     if (request && request.headers.host !== 'api') {
-  //       message.error = '403::Forbidden origin';
-  //     }
-  //     callback(message);
-  //   }
-  // });
-
   bayeux.addExtension(serverAuth);
-  //bayeux.addExtension(filter);
 };
