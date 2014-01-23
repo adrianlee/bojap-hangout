@@ -13,7 +13,7 @@ angular.module('bojap', ['ngRoute', 'ngResource'])
     .otherwise({ redirectTo: '/' });
 })
 
-.run(function ($rootScope, $location, User) {
+.run(function ($rootScope, $location, $http, User) {
   $rootScope.$on('$locationChangeStart', function (event, next, current) {
     if ($location.$$search && $location.$$search.token && $location.$$search.user) {
       User.login($location.$$search.user, $location.$$search.token);

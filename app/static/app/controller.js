@@ -9,18 +9,14 @@ angular.module('bojap')
 
   // Side Menu
   $(function() {
+    // Toggle side menu
     $('#menuLink').click(function (e) {
       e.preventDefault();
       $('#layout').toggleClass('active');
       e.stopPropagation();
     });
 
-    // $('#nav li').click(function (e) {
-    //   // setTimeout(function() {
-    //     $('#layout').removeClass('active');
-    //   // }, 200);
-    // });
-
+    // Click anywhere to minimize side menu
     $(document).click(function (e) {
       if ($('#layout').hasClass('active')) {
         $('#layout').removeClass('active');
@@ -28,8 +24,6 @@ angular.module('bojap')
     });
   });
 })
-
-
 
 .controller('Login', function ($scope, $location, User) {
   
@@ -96,23 +90,11 @@ angular.module('bojap')
   $scope.template = $scope.templates[$route.current.$$route.originalPath.substring(1)] || $scope.templates.welcome;
 })
 
-.controller('Welcome', function ($scope, Faye) {
-  Faye.client.subscribe('/notifications/public', function(message) {
-    console.log('/notifications/public: ' + message.text);
+.controller('Welcome', function ($scope, Faye, $resource) {
+  var Health = $resource('http://api.bojap.com/health');
+  $scope.health = Health.get({}, function() {
+    console.log($scope.health);
   });
-
-  Faye.client.subscribe('/notifications/private/123', function(message) {
-    alert('/notifications/private/123: ' + message.text);
-  });
-
-  $scope.message = {};
-
-  $scope.send = function (message) {
-    Faye.client.publish('/' + message.channel, {
-      sender: '123',
-      text: message.data
-    });
-  }
 })
 
 .controller('Message', function ($scope, $http) {
