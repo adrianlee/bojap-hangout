@@ -50,6 +50,22 @@ api.get('/profile', profile.getById);
 api.get('/messages', messages.getMessages);
 api.post('/messages', messages.postMessages);
 
+// TO IMPLEMENT
+api.get('/user.get')  // Retrieve the details of one or many users. Use self to retrieve the authenticated user.
+api.get('/user.search')  // Search for a set of users according to criteria.
+api.get('/user.save')  // Update an existing user or create a new one. When updating an existing user, specifying only partial fields will only result in those fields being updated.
+api.get('/user.count')  // Count the number of users with or without filtering.
+api.get('/user.remove') // Remove one or many users.
+api.get('/user.login')  // If login and password is correct a temporary session token will be created. Use this token to authenticate other API calls. This method does not require a token for authentication (see Authentication).
+api.get('/user.logout')
+api.get('/user.resetPassword')
+api.get('/user.changePassword')
+api.get('/user.hasFeature')
+api.get('/user.hasPermission')
+api.get('/user.getSubscriptionDetail')
+
+
+
 
 /*
  *  Launch

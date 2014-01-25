@@ -3,10 +3,6 @@ angular.module('bojap')
 .controller('Main', function ($scope, $location, User, Faye) {
   $scope.loggedIn = User.isAuthenticated;
 
-  if ($scope.loggedIn) {
-    console.log(User.isAuthenticated());
-  }
-
   // Side Menu
   $(function() {
     // Toggle side menu

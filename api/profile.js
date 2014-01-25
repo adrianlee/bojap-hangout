@@ -3,6 +3,8 @@ var db = require('../core/db');
 function getById(req, res) {
   var id = req.user && req.user._id;
 
+  console.log(req.user);
+
   db.User.findOne({_id: id}).select('+email').exec(function (err, user) {
     if (err) return res.send(500, err);
 
