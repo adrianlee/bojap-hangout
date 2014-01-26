@@ -1,5 +1,11 @@
+"use strict";
+
 var mongoose = require('mongoose');
 var config = require('../config');
+var bcrypt = require('bcrypt');
+var SALT_WORK_FACTOR = 10;
+
+var db = {};
 
 mongoose.connect(config.mongohqURI, function (err, res) {
   if (err) {
@@ -21,15 +27,45 @@ var GoogleProviderSchema = {
   locale: String
 };
 
-var UserSchema = {
-  displayName: String,
-  email: { type: String, select: false },
-  google:  { type: GoogleProviderSchema, select: false }
+// Schemas
+var UserSchema = new mongoose.Schema({
+  displayName: { type: String, required: true },
+  email: { type: String, select: false, required: true, unique: true },
+  google:  { type: GoogleProviderSchema, select: false },
+  password: { type: String, select: false, required: true },
+  updated_at: { type: Date, default: Date.now },
+  created_at: { type: Date, default: Date.now }
+});
+
+UserSchema.pre('save', function(next) {
+  var user = this;
+
+  // only hash the password if it has been modified (or is new)
+  if (!user.isModified('password')) return next();
+
+  // generate a salt
+  bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+    if (err) return next(err);
+
+    // hash the password along with our new salt
+    bcrypt.hash(user.password, salt, function(err, hash) {
+      if (err) return next(err);
+
+      // override the cleartext password with the hashed one
+      user.password = hash;
+      next();
+    });
+  });
+});
+
+UserSchema.methods.comparePassword = function(userPassword, cb) {
+  bcrypt.compare(userPassword, this.password, function(err, isMatch) {
+    if (err) return cb(err);
+    cb(null, isMatch);
+  });
 };
 
-var UserModel = mongoose.model('User', UserSchema);
-
-var MessageSchema = {
+var MessageSchema = new mongoose.Schema({
   users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   subject: String,
   messages: [
@@ -40,11 +76,10 @@ var MessageSchema = {
       timestamp: { type: Date, default: Date.now }
     }
   ]
-};
+});
 
-var MessageMoodel = mongoose.model('Message', MessageSchema);
+// Models
+db.User = mongoose.model('User', UserSchema);
+db.Message = mongoose.model('Message', MessageSchema);
 
-module.exports = {
-  User: UserModel,
-  Message: MessageMoodel
-};
+module.exports = db;

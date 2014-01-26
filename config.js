@@ -17,3 +17,8 @@ exports.GoogleStrategy = {};
 exports.GoogleStrategy.clientID = "692122391406-gjftvker6cnq0ab54fd7jq9h7popfn76.apps.googleusercontent.com";
 exports.GoogleStrategy.clientSecret = "uPo1RwT95KrFgfczCL3VXTZ3";
 exports.GoogleStrategy.callbackURL = "http://app.bojap.com/auth/google/callback";
+
+exports.env = process.env.NODE_ENV || process.argv[3] || "dev";
+
+exports.prod = {};
+exports.dev = {};

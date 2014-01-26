@@ -1,12 +1,12 @@
 {
-  "name": "hangout",
-  "version": "0.0.0",
-  "description": "",
-  "main": "app.js",
+  "name": "Bojap",
+  "version": "0.0.1",
+  "description": "Bojap",
+  "main": "api.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -R spec"
   },
-  "author": "",
+  "author": "adrianlee",
   "license": "",
   "dependencies": {
     "express": "~3.4.7",
@@ -19,5 +19,8 @@
     "when": "~2.7.1",
     "jwt-simple": "~0.1.0",
     "faye": "~1.0.1"
+  },
+  "devDependencies": {
+    "request": "~2.33.0"
   }
 }
