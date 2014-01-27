@@ -9,24 +9,27 @@ User.get = function (req, res) {
   var id = req.param('id');
 
   // validate input
-  if (!id) {
-    return res.send({ error: 400, message: "ID field missing" });
+  if (!id || id == "self") {
+    console.log("self");
+    console.log(req.user);
+    id = req.user._id;
   }
 
-  // parse object id
-  try {
-    id = require('mongoose').Types.ObjectId(req.param('id'));
-  } catch (e) {
-    return res.send({ error: 400, message: "ID field not an ObjectId", payload: e.message });
-  }
-
+  // // parse object id
+  // try {
+  //   id = require('mongoose').Types.ObjectId(id);
+  // } catch (e) {
+  //   return res.send({ error: 400, message: "ID field not an ObjectId", payload: e.message });
+  // }
 
   db.User.findOne({ _id: id }).exec(function (err, user) {
     // error
-    if (err) return res.send({ error: 404, payload: err });
+    if (err) return res.send({ error: 400, message: "Most likely invalid id", payload: err });
+
+    if (!user) return res.send({ error: 404, message: "User not found", payload: user });
 
     // success
-    console.log(user);
+    console.log("User.get", user);
     res.send({ success: 200, payload: user });
   });
 };
@@ -138,8 +141,8 @@ User.login = function (req, res) {
 
       // success
       // remove password from user doc
-      delete user.password;
-      console.log(user);
+      user.password = undefined;
+      console.log("User.login:", user);
 
       // generate token
       var token = auth.getToken(user);
@@ -152,9 +155,7 @@ User.login = function (req, res) {
 };
 
 User.logout = function (req, res) {
-  var token = "123";
-
-  auth.deleteToken(token, function (err, result) {
+  auth.deleteToken(req.token, function (err, result) {
     // error
     if (err) return res.send({ error: 400, message: err });
 

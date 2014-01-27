@@ -17,6 +17,7 @@ var User = require('./User');
 /*
  * Middleware
  */
+api.disable('x-powered-by');
 api.use(express.logger("dev"));
 api.use(express.json());
 api.use(express.urlencoded());
@@ -54,12 +55,12 @@ api.get('/profile', profile.getById);
 api.get('/messages', messages.getMessages);
 api.post('/messages', messages.postMessages);
 
-api.get('/user.get', User.get)  // Retrieve the details of one or many users. Use self to retrieve the authenticated user.
-api.post('/user.save', User.save)  // Update an existing user or create a new one. When updating an existing user, specifying only partial fields will only result in those fields being updated.
-api.post('/user.remove', User.remove) // Remove one or many users.
 api.get('/user.login', User.login)  // If login and password is correct a temporary session token will be created. Use this token to authenticate other API calls. This method does not require a token for authentication (see Authentication).
 api.post('/user.login', User.login)  // If login and password is correct a temporary session token will be created. Use this token to authenticate other API calls. This method does not require a token for authentication (see Authentication).
-api.get('/user.logout', User.logout)
+api.get('/user.logout', middleware.authentication, User.logout)
+api.get('/user.get', middleware.authentication, User.get)  // Retrieve the details of one or many users. Use self to retrieve the authenticated user.
+api.post('/user.save', middleware.authentication, User.save)  // Update an existing user or create a new one. When updating an existing user, specifying only partial fields will only result in those fields being updated.
+api.post('/user.remove', middleware.authentication, User.remove) // Remove one or many users.
 
 // TO IMPLEMENT
 api.get('/user.search')  // Search for a set of users according to criteria.
