@@ -10,8 +10,6 @@ User.get = function (req, res) {
 
   // validate input
   if (!id || id == "self") {
-    console.log("self");
-    console.log(req.user);
     id = req.user._id;
   }
 
@@ -26,6 +24,7 @@ User.get = function (req, res) {
     // error
     if (err) return res.send({ error: 400, message: "Most likely invalid id", payload: err });
 
+    // dne
     if (!user) return res.send({ error: 404, message: "User not found", payload: user });
 
     // success
