@@ -1,0 +1,36 @@
+<div ng-controller="Message">
+<h2 class="content-header">Private Messages</h2>
+<p><a onclick="$('#compose').toggle()" class="pure-button pure-button-success">Create</a></p>
+<form id="compose" style="display: none;" class="pure-form">
+  <fieldset>
+    <div class="pure-group">
+      <input type="text" placeholder="Recipient" ng-model="input.recipient" class="pure-input-2-3">
+      <input type="text" placeholder="Subject" ng-model="input.subject" class="pure-input-2-3">
+    </div>
+    <div class="pure-group">
+      <textarea style="height: 120px;" placeholder="Your Message..." ng-model="input.message" class="pure-input-2-3"></textarea>
+    </div>
+    <div class="pure-group"><a style="margin: .35em 0;" ng-click="send(input)" class="pure-button pure-button-primary">Send</a></div>
+  </fieldset>
+</form>
+<p>
+  <table class="pure-table pure-table-horizontal">
+    <thead>
+      <tr>
+        <th>To / From</th>
+        <th>Subject</th>
+        <th>Message</th>
+        <th>Last reply</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="message in messages">
+        <td>{{message.users}}</td>
+        <td>{{message.subject}}</td>
+        <td>{{message.messages[message.messages.length-1].message}}</td>
+        <td>{{message.messages[message.messages.length-1].timestamp | date:'MM/dd/yyyy @ h:mma'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</p>
+</div>

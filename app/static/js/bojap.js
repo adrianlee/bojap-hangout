@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('bojap', ['ngRoute', 'ngResource'])
+var app = angular.module('bojap', ['ngRoute', 'ngResource'])
 
 .config(function($routeProvider) {
   $routeProvider
-    .when('/', { controller: 'Landing', templateUrl: 'landing.html' })
-    .when('/hangout', { controller: 'Hangout', templateUrl: 'hangout.html' })
-    .when('/messages', { controller: 'Landing', templateUrl: 'landing.html' })
-    .when('/profile', { controller: 'Landing', templateUrl: 'landing.html' })
-    .when('/login', { controller: 'Login', templateUrl: 'login.html' })
-    .when('/logout', { controller: 'Logout', templateUrl: 'logout.html' })
+    .when('/', { controller: 'Landing', templateUrl: 'templates/landing.html' })
+    .when('/hangout', { controller: 'Hangout', templateUrl: 'templates/hangout.html' })
+    .when('/messages', { controller: 'Landing', templateUrl: 'templates/landing.html' })
+    .when('/profile', { controller: 'Landing', templateUrl: 'templates/landing.html' })
+    .when('/login', { controller: 'Login', templateUrl: 'templates/login.html' })
+    .when('/logout', { controller: 'Logout', templateUrl: 'templates/logout.html' })
     .otherwise({ redirectTo: '/' });
 })
 

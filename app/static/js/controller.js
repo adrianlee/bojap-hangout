@@ -22,7 +22,45 @@ angular.module('bojap')
 })
 
 .controller('Login', function ($scope, $location, User) {
-  
+  $scope.login = function (input) {
+    if (!input) return false;
+    if (!input.email || !input.password) return alert("Enter a valid email and password ");
+
+    accountService.login(input.email, input.pasword, function (err, result) {
+      if (err) return $scope.showError(error.message);
+
+      if (result.lock_type == "CANCELED") {
+        $scope.showError("Your account has been canceled. Please contact us to have it restored.");
+        return;
+      } else if (result.lock_type) {
+        $scope.showError("Your account has been locked.");
+        return;
+      }
+
+      accountService.getAccount(function (error, account) {
+        if (error) return $scope.showError(error.message);
+        
+        // $rootScope.account = account;
+        
+        // if ($location.search().returnto) {
+        //   $location.path($location.search().returnto);
+        //   $location.search("returnto", null);
+        // } else {
+        //   $location.path("/home/");
+        // }
+
+        // $rootScope.safeApply($scope);
+      });
+    });
+  };
+
+  $scope.signup = function (input) {
+    if (!input) return false;
+    if (!input.email || !input.password) return alert("Enter a valid email and password ");
+
+
+    console.log(input);
+  };
 })
 
 .controller('Logout', function ($location, User) {

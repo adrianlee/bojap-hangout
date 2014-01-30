@@ -1,0 +1,31 @@
+<div class="content">
+<div class="content-subhead">Log in</div>
+
+<p>
+  <form class="pure-form">
+    <fieldset class="pure-group">
+        <input type="email" class="pure-input-1-2" placeholder="Email" ng-model="loginInput.email">
+        <input type="password" class="pure-input-1-2" placeholder="Password" ng-model="loginInput.password">
+    </fieldset>
+
+    <button type="submit" class="pure-button pure-input-1-2 pure-button-primary" ng-click="login(loginInput)">Log in</button>
+  </form>
+</p>
+
+<!--
+or
+
+<p><a href="/auth/google" class="pure-button pure-button-success">Log in with Google</a></p>
+ -->
+<div class="content-subhead">Get started, it is Free!</div>
+  <p>
+    <form class="pure-form">
+      <fieldset>
+          <input type="text" placeholder="Name" ng-model="signUpInput.name">
+          <input type="email" placeholder="Email" ng-model="signUpInput.email">
+          <input type="password" placeholder="Password" ng-model="signUpInput.password">
+          <button type="submit" class="pure-button pure-button-primary" ng-click="signup(signUpInput)">Get started!</button>
+      </fieldset>
+    </form>
+  </p>
+</div>
