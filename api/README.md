@@ -35,8 +35,7 @@ success: { success: 201, payload: [profile], token: [token] }
 ```
 
 ### User.save
-Edit a user profile
-Logged in user will attempt to edit profile of specified `id`
+Update an existing user. ID must be specified. Specifying only partial fields will only result in those fields being updated.
 ```js
 endpoint: 'user.save'
 method: 'POST'
