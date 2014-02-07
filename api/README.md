@@ -23,6 +23,7 @@ method: 'POST'
 header: [token]
 input: { id: [objectId] }
 success: { success: 200, payload: [profile] }
+```
 
 ### User.create
 Create new user account
