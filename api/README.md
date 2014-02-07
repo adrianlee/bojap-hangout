@@ -23,3 +23,21 @@ method: 'POST'
 header: [token]
 input: { id: [objectId] }
 success: { success: 200, payload: [profile] }
+
+### User.create
+Create new user account
+```js
+endpoint: 'user.create'
+method: 'POST'
+input: { email: [email], password: [password], displayName: [displayName] }
+success: { success: 201, payload: [profile], token: [token] }
+```
+
+### User.save
+Edit a user profile
+Logged in user will attempt to edit profile of specified `id`
+```js
+endpoint: 'user.save'
+method: 'POST'
+input: { id: [objectId], ... }
+```
