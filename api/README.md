@@ -17,6 +17,7 @@ header: [token]
 
 ### User.get
 Authenicated call. Fetches a user profile. If `id` is `'me'` or `undefined`, then it will return profile of logged in user.
+Retrieve the details of one or many users. Use self to retrieve the authenticated user.
 ```js
 endpoint: '/user.get'
 method: 'POST'
