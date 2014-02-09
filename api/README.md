@@ -29,7 +29,7 @@ success: { success: 200, payload: [profile] }
 ### User.create
 Create new user account
 ```js
-endpoint: 'user.create'
+endpoint: '/user.create'
 method: 'POST'
 input: { email: [email], password: [password], displayName: [displayName] }
 success: { success: 201, payload: [profile], token: [token] }
@@ -38,7 +38,7 @@ success: { success: 201, payload: [profile], token: [token] }
 ### User.save
 Update an existing user. ID must be specified. Specifying only partial fields will only result in those fields being updated.
 ```js
-endpoint: 'user.save'
+endpoint: '/user.save'
 method: 'POST'
 input: { id: [objectId], ... }
 ```
