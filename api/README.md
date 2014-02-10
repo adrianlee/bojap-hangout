@@ -1,8 +1,9 @@
-# API
-
-## User
-User.login
-User.logout
-User.get
-User.save
-User.remove
+## API
+### User.login
+```javascript
+email
+password
+```
+#### Return Value
+#### Errors
+#### Code Example

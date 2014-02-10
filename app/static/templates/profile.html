@@ -1,24 +1,38 @@
 <div ng-controller="Profile">
-  <h2 class="content-header">Profile</h2>
-  <form class="pure-form pure-form-aligned">
-    <fieldset>
-      <div class="pure-control-group">
-        <label for="name">Name</label>
-        <input id="name" type="text" placeholder="Username" ng-model="input.displayName" class="pure-input-1-2">
+  <h2>Profile</h2>
+  <form>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Name</label>
+      <div class="col-sm-9">
+        <input class="form-control" type="text" placeholder="Username" ng-model="input.displayName">
       </div>
-      <div class="pure-control-group">
-        <label for="email">Contact Email</label>
-        <input id="email" type="email" placeholder="Email Address" ng-model="input.email" class="pure-input-1-2">
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Contact Email</label>
+      <div class="col-sm-9">
+        <input class="form-control" type="email" placeholder="Email Address" ng-model="input.email">
       </div>
-      <div class="pure-control-group">
-        <label for="number">Contact Number</label>
-        <input id="number" type="number" min="9999999" max="99999999" placeholder="" ng-model="input.phone" class="pure-input-1-2">
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Contact Number</label>
+      <div class="col-sm-9">
+        <input class="form-control" type="number" min="9999999" max="99999999" placeholder="" ng-model="input.phone">
       </div>
-      <div class="pure-control-group">
-        <label for="bio">Bio</label>
-        <textarea id="bio" style="height: 120px;" placeholder="Tell others about yourself..." ng-model="input.body" class="pure-input-1-2"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Bio</label>
+      <div class="col-sm-9">
+        <textarea class="form-control" rows="4" placeholder="Tell others about yourself..." ng-model="input.body"></textarea>
       </div>
-      <div class="pure-controls"><a ng-click="send(input)" class="pure-button pure-button-primary">Save Changes</a></div>
-    </fieldset>
+    </div>
+
+    <div class="form-group">
+      <a ng-click="send(input)" class="btn btn-default">Save Changes</a>
+    </div>
   </form>
+
+  {{input}}
 </div>

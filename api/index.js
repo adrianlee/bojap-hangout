@@ -31,7 +31,7 @@ api.use(function cors (req, res, next) {
 
 // Server
 api.get('/', function (req, res) {
-  res.redirect('/health');
+  res.send("bojap api server");
 });
 
 api.get('/health', middleware.authentication, function (req, res) {
@@ -55,21 +55,22 @@ api.get('/profile', profile.getById);
 api.get('/messages', messages.getMessages);
 api.post('/messages', messages.postMessages);
 
-api.get('/user.login', User.login)  // If login and password is correct a temporary session token will be created. Use this token to authenticate other API calls. This method does not require a token for authentication (see Authentication).
-api.post('/user.login', User.login)  // If login and password is correct a temporary session token will be created. Use this token to authenticate other API calls. This method does not require a token for authentication (see Authentication).
-api.get('/user.logout', middleware.authentication, User.logout)
-api.get('/user.get', middleware.authentication, User.get)  // Retrieve the details of one or many users. Use self to retrieve the authenticated user.
-api.post('/user.save', middleware.authentication, User.save)  // Update an existing user or create a new one. When updating an existing user, specifying only partial fields will only result in those fields being updated.
-api.post('/user.remove', middleware.authentication, User.remove) // Remove one or many users.
+// User
+api.post('/user.login', User.login);
+api.get('/user.logout', middleware.authentication, User.logout);
+api.post('/user.get', middleware.authentication, User.get);
+api.post('/user.create', User.create);
+api.post('/user.save', middleware.authentication, User.save);  
+api.post('/user.remove', middleware.authentication, User.remove);
 
 // TO IMPLEMENT
-api.get('/user.search')  // Search for a set of users according to criteria.
-api.get('/user.count')  // Count the number of users with or without filtering.
-api.get('/user.resetPassword')
-api.get('/user.changePassword')
-api.get('/user.hasFeature')
-api.get('/user.hasPermission')
-api.get('/user.getSubscriptionDetail')
+api.get('/user.search');
+api.get('/user.count');
+api.get('/user.resetPassword');
+api.get('/user.changePassword');
+api.get('/user.hasFeature');
+api.get('/user.hasPermission');
+api.get('/user.getSubscriptionDetail');
 
 
 /*
