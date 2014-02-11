@@ -5,9 +5,10 @@ angular.module('bojap')
   var self = this;
 
   this.authenticated = false;
-  this.user = null;
   this.token = null;
   this.profile = {};
+
+
   
   if (getToken()) {
     this.token = getToken();
@@ -23,6 +24,10 @@ angular.module('bojap')
     self.authenticated = true;
     $http.defaults.headers.common.Authorization = 'Basic ' + Base64.encode(token + ':' + token);
     return localStorage["token"] = token;
+  }
+
+  function setProfile(profile) {
+    self.profile = profile;
   }
 
   return {
@@ -42,7 +47,6 @@ angular.module('bojap')
 
       setToken(token);
       
-      self.user = user;
       self.token = token;
 
       return true;
@@ -63,14 +67,14 @@ angular.module('bojap')
         }
 
         setToken(data.token);
-        that.setProfile(data.payload);
+        setProfile(data.payload);
 
         cb(null, data);
       });
     },
     logout: function () {
-      self.user = null;
       self.token = null;
+      self.profile = {};
 
       // setToken(null);
       localStorage.clear();
@@ -91,11 +95,9 @@ angular.module('bojap')
         }
       }).
       success(function(data, status, headers, config) {
+        self.profile = data.payload;
         cb(data.error ? data : null, data.payload);
       });
-    },
-    setProfile: function (profile) {
-      $rootScope.profile = profile;
     }
   }
 });

@@ -1,10 +1,12 @@
 <h3>Login</h3>
 
 <form class="form-inline" role="form">
-  <input type="email" name="email" class="form-control" placeholder="Email" ng-model="loginInput.email">
+  <input type="email" name="email" class="form-control" placeholder="Email" autofocus ng-model="loginInput.email">
   <input type="password" class="form-control" placeholder="Password" ng-model="loginInput.password">
   <button type="submit" class="btn btn-success" ng-click="login(loginInput)">Log in</button>
 </form>
+
+{{loginInput | json}}
 
 <!--
 or
@@ -15,9 +17,10 @@ or
 <h3>Sign up</h3>
 
 <form class="form-inline" role="form">
-  <div class="form-group">
   <input type="text" class="form-control" placeholder="Name" ng-model="signUpInput.name">
   <input type="email" class="form-control" placeholder="Email" ng-model="signUpInput.email">
   <input type="password" class="form-control" placeholder="Password" ng-model="signUpInput.password">
   <button type="submit" class="btn btn-success" ng-click="signup(signUpInput)">Get started!</button>
 </form>
+
+{{signUpInput | json}}
