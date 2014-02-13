@@ -11,25 +11,25 @@ Users.login = function (req, res) {
   var password = req.param('password');
 
   // validate 
-  if (!email) return res.send({ error: 403, message: "Missing email" });
-  if (!password) return res.send({ error: 403, message: "Missing password" });
+  if (!email) return res.send(403, { message: "Missing email" });
+  if (!password) return res.send(403, { message: "Missing password" });
 
   db.User.findOne({ email: email })
   .select('+password')
   .exec(function (err, user) {
     // error
-    if (err) return res.send({ error: 400, debug: err });
+    if (err) return res.send(400, { error: err });
 
     // not found
-    if (!user) return res.send({ error: 404, message: "User not found" });
+    if (!user) return res.send(400, { message: "User not found" });
 
     // compare password
     user.comparePassword(password, function(err, isMatch) {
       // error
-      if (err) return res.send({ error: 400, message: "Something went wrong in comparePassword", payload: err });
+      if (err) return res.send(400, { message: "Something went wrong in comparePassword", error: err });
 
       // wrong password
-      if (!isMatch) return res.send({ error: 403, message: "Wrong Password"});
+      if (!isMatch) return res.send(403, { message: "Wrong Password"});
 
       // success
       // remove password from user doc
@@ -38,9 +38,9 @@ Users.login = function (req, res) {
 
       // generate token
       var token = auth.getToken(user);
-      if (!token) return res.send({ error: 400, message: "Couldn't generate token" });
+      if (!token) return res.send(400, { message: "Couldn't generate token" });
 
-      res.send({ success: 200, payload: user, token: token });
+      res.send(200, { token: token });
     });
 
   });
@@ -50,21 +50,21 @@ Users.login = function (req, res) {
 // GET /logout
 Users.logout = function (req, res) {
   auth.deleteToken(req.token, function (err, result) {
-    if (err) return res.send({ error: 400, debug: err });
-    if (!result) return res.send({ error: 404, message: "Couldn't find token to logout" });
+    if (err) return res.send(400, { error: err });
+    if (!result) return res.send(404, { message: "Couldn't find token to logout" });
 
     // success
-    res.send({ success: 200, message: "Logged out" });
+    res.send(200, { message: "Logged out" });
   });
 };
 
 // GET /users
 Users.list = function (req, res) {
   db.User.find().exec(function (err, user) {
-    if (err) return res.send({ error: 400, message: "Something went wrong", debug: err });
-    if (!user) return res.send({ error: 404, message: "No Users", debug: user });
+    if (err) return res.send(400, { message: "Something went wrong", error: err });
+    if (!user) return res.send(404, { message: "No Users", error: user });
 
-    res.send({ success: 200, payload: user });
+    res.send(200, { payload: user });
   });
 };
 
@@ -81,18 +81,17 @@ Users.read = function (req, res) {
   }
 
   db.User.findOne({ _id: id }).select(include).exec(function (err, user) {
-    if (err) return res.send({ error: 400, message: "Most likely invalid id", debug: err });
-    if (!user) return res.send({ error: 404, message: "User not found", debug: user });
+    if (err) return res.send(400, { message: "Most likely invalid id", error: err });
+    if (!user) return res.send(404, { message: "User not found", error: user });
 
-    res.send({ success: 200, payload: user });
+    res.send(200, { payload: user });
   });
 };
 
+
 // POST /users
-// PUT /users/:id
-// DEL /users/:id
 Users.create = function (req, res) {
-  if (req.user) return res.send({ error: 400, message: "Please log out before you create a new account"});
+  if (req.user) return res.send(400, { message: "Please log out before you create a new account"});
 
   // create
   var newUser = db.User({
@@ -102,19 +101,19 @@ Users.create = function (req, res) {
   });
 
   newUser.save(function (err, user) {
-    if (err) return res.send({ error: 400, message: "Validation error", debug: err });
+    if (err) return res.send(400, { message: "Validation error", error: err });
 
     console.log(user);
-    res.send({ success: 201, payload: user });
+    res.send(201, { payload: user });
   });
 };
 
 
-
+// PUT /users/:id
 Users.update = function (req, res) {
   var id = req.param('id');
 
-  if (!id) return res.send({ error: 400, message: "Specify an ID" });
+  if (!id) return res.send(400, { message: "Specify an ID" });
 
   // assign me to id
   if (id == "me") {
@@ -125,33 +124,35 @@ Users.update = function (req, res) {
   try {
     id = require('mongoose').Types.ObjectId(id);
   } catch (e) {
-    return res.send({ error: 400, message: "ID field not an ObjectId", debug: e.message });
+    return res.send(400, { message: "ID field not an ObjectId", error: e.message });
   }
 
   console.log(req.user._id, "is trying to edit profile", id);
 
   if (req.user._id != id) {
-    return res.send({ error: 400, message: "You don't have permissions to edit profile" + id });
+    return res.send(400, { message: "You don't have permissions to edit profile" + id });
   }
   
   // edit
   db.User.findOne({ _id: id })
   .exec(function (err, user) {
-    if (err) return res.send({ error: 400, debug: user });
-    if (!user) return res.send({ error: 404, message: "User not found" });
+    if (err) return res.send(400, { error: user });
+    if (!user) return res.send(404, { message: "User not found" });
 
     // edit user
     req.param('email') ? user.email = req.param('email') : null;
     req.param('displayName') ? user.displayName = req.param('displayName') : null;
 
     user.save(function (err, user) {
-      if (err) return res.send({ error: 400, message: "Couldn't save user changes", payload: err });
+      if (err) return res.send(400, { message: "Couldn't save user changes", payload: err });
       console.log("saved", user);
-      res.send({ success: 200, payload: user });
+      res.send(200, { payload: user });
     })
   });
 };
 
+
+// DEL /users/:id
 Users.remove = function (req, res) {
   var id = req.param('id');
 
@@ -159,22 +160,22 @@ Users.remove = function (req, res) {
   try {
     id = require('mongoose').Types.ObjectId(id);
   } catch (e) {
-    return res.send({ error: 400, message: "ID field not an ObjectId", debug: e.message });
+    return res.send(400, { message: "ID field not an ObjectId", error: e.message });
   }
 
   // validate input
   if (!id) {
-    return res.send({ error: 400, message: "ID field missing" });
+    return res.send(400, { message: "ID field missing" });
   }
 
   db.User.findOneAndRemove({ _id: id })
   .exec(function (err, user) {
-    if (err) return res.send({ error: 400, debug: err });
-    if (!user) return res.send({ error: 404, message: "User not found" });
+    if (err) return res.send(400, { error: err });
+    if (!user) return res.send(404, { message: "User not found" });
 
     // success
     console.log(user);
-    res.send({ success: 200, payload: user });
+    res.send(200, { payload: user });
   });
 };
 
