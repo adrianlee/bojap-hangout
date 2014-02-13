@@ -17,12 +17,15 @@ module.exports = {
   auth: function (req, res, next) {
     if (!req.headers['authorization']) return res.send(401, { message: "Need some credentials" });
 
+    var token = parseToken(req.headers['authorization']);
+
     // check if user is logged in, save user id in req.user
-    auth.checkToken(parseToken(req.headers['authorization']), function (err, userId) {
+    auth.checkToken(token, function (err, userId) {
       if (err) return next(err);
-      if (!userId) return res.send(400, { message: "bad token" });
+      if (!userId) return res.send(401, { message: "Token invalid" });
 
       req.user = { _id: userId };
+      req.token = token;
 
       // Add admin flag to admins
       if (config.admins.indexOf(userId) != -1) {
@@ -32,4 +35,4 @@ module.exports = {
       next();
     });
   }
-}
+};

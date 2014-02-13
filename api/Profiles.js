@@ -1,19 +1,30 @@
 var db = require('../core/db');
 
-function getById(req, res) {
-  var id = req.user && req.user._id;
+var Profiles = {};
 
-  console.log(req.user);
-
-  db.User.findOne({_id: id}).select('+email').exec(function (err, user) {
-    if (err) return res.send(500, err);
-
-    if (!user) return res.send(404, "user not found");
-
-    res.send(user);
-  });
-}
-
-module.exports = {
-  getById: getById
+// Permissions: public
+Profiles.list = function (req, res) {
+  res.send(501);
 };
+
+// Permissions: public
+Profiles.read = function (req, res) {
+  res.send(501);
+};
+
+// Permissions: self
+Profiles.create = function (req, res) {
+  res.send(501);
+};
+
+// Permissions: self
+Profiles.update = function (req, res) {
+  res.send(501);
+};
+
+// Permissions: admin
+Profiles.remove = function (req, res) {
+  res.send(501);
+};
+
+module.exports = Profiles;

@@ -72,7 +72,26 @@ function postMessages(req, res) {
   // });
 }
 
-module.exports = {
-  getMessages: getMessages,
-  postMessages: postMessages
+var Messages = {};
+
+Messages.list = function (req, res) {
+  res.send(501);
 };
+
+Messages.read = function (req, res) {
+  res.send(501);
+};
+
+Messages.create = function (req, res) {
+  res.send(501);
+};
+
+Messages.update = function (req, res) {
+  res.send(501);
+};
+
+Messages.remove = function (req, res) {
+  res.send(501);
+};
+
+module.exports = Messages;
