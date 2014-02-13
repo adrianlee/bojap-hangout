@@ -12,7 +12,7 @@ var middleware = require('./middleware');
 var faye = require('./faye')(server);
 
 var Users = require('./Users');
-var Profile = require('./Profile');
+var Profiles = require('./Profiles');
 
 /*
  * Middleware
