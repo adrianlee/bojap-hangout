@@ -46,28 +46,28 @@ api.get('/health', function (req, res) {
   })
 });
 
-// Login / Logout
+// Login & Logout
 api.get('/login', Users.login);
-api.get('/logout', middleware.authentication, Users.logout);
+api.get('/logout', middleware.auth, Users.logout);
 
-// CRUD User
-api.get('/users', Users.list); // Get list of users
-api.get('/users/:id', Users.read); // Get a user
+// User Resource
 api.post('/users', Users.create);  // Create a new user
-api.put('/users/:id', Users.update); // Update user information
-api.del('/users/:id', Users.remove); // Delete a user
+api.get('/users', middleware.auth, Users.list); // Get list of users
+api.get('/users/:id', middleware.auth, Users.read); // Get a user
+api.put('/users/:id', middleware.auth, Users.update); // Update user information
+api.del('/users/:id', middleware.auth, Users.remove); // Delete a user
 
-// CRUD Profile
+// Profile Resource
+api.post('/profile'); // Create a new profile
 api.get('/profile'); // List profiles
 api.get('/profile/:id'); // Get a profile
-api.post('/profile'); // Create a new profile
 api.put('/profile/:id'); // Update a profile
 api.del('/profile/:id'); // Delete a profile
 
-// CRUD Messages
+// Messages Resource
+api.post('/messages', messages.postMessages); // Send a message
 api.get('/messages', messages.getMessages); // List messages
 api.get('/messages/:id', messages.getMessages); // Get a message
-api.post('/messages', messages.postMessages); // Send a message
 api.put('/messages/:id', messages.postMessages); // Edit a message
 api.del('/messages/:id', messages.postMessages); // Delete a message
 
@@ -79,11 +79,11 @@ api.post('/heartbeat', hangout.heartbeat.post);
 
 // User
 // api.post('/user.login', User.login);
-// api.get('/user.logout', middleware.authentication, User.logout);
-// api.post('/user.get', middleware.authentication, User.get);
+// api.get('/user.logout', middleware.auth, User.logout);
+// api.post('/user.get', middleware.auth, User.get);
 // api.post('/user.create', User.create);
-// api.post('/user.save', middleware.authentication, User.save);  
-// api.post('/user.remove', middleware.authentication, User.remove);
+// api.post('/user.save', middleware.auth, User.save);  
+// api.post('/user.remove', middleware.auth, User.remove);
 
 // TO IMPLEMENT
 // api.get('/user.search');

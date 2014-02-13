@@ -22,3 +22,6 @@ exports.env = process.env.NODE_ENV || process.argv[3] || "dev";
 
 exports.prod = {};
 exports.dev = {};
+
+
+exports.admins = ['52d4d1869b260aec199501f6'];

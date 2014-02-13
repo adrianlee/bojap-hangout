@@ -5,7 +5,10 @@ var auth = require('../core/auth')
 
 var Users = {};
 
-// GET /login?email=&password=
+
+// LOGIN
+// Route: GET /login?email=&password=
+// Permissions: public
 Users.login = function (req, res) {
   var email = req.param('email');
   var password = req.param('password');
@@ -15,7 +18,7 @@ Users.login = function (req, res) {
   if (!password) return res.send(403, { message: "Missing password" });
 
   db.User.findOne({ email: email })
-  .select('+password')
+  .select('+password +email')
   .exec(function (err, user) {
     // error
     if (err) return res.send(400, { error: err });
@@ -40,14 +43,16 @@ Users.login = function (req, res) {
       var token = auth.getToken(user);
       if (!token) return res.send(400, { message: "Couldn't generate token" });
 
-      res.send(200, { token: token });
+      res.send(200, { token: token, user: user });
     });
 
   });
 };
 
 
-// GET /logout
+// LOGOUT
+// Route: GET /logout
+// Permissions: self
 Users.logout = function (req, res) {
   auth.deleteToken(req.token, function (err, result) {
     if (err) return res.send(400, { error: err });
@@ -58,42 +63,47 @@ Users.logout = function (req, res) {
   });
 };
 
-// GET /users
+// LIST USERS
+// Route: GET /users
+// Permissions: admin
 Users.list = function (req, res) {
-  db.User.find().exec(function (err, user) {
-    if (err) return res.send(400, { message: "Something went wrong", error: err });
-    if (!user) return res.send(404, { message: "No Users", error: user });
+  if (!req.admin) return res.send(401);
 
-    res.send(200, { payload: user });
+  db.User.find().select('+email').exec(function (err, user) {
+    if (err) return res.send(400, { message: "Something went wrong", error: err });
+    res.send(200, user);
   });
 };
 
 
-// GET /users/:id
+// GET A USER
+// Route: GET /users/:id
+// Permissions: self, admin
 Users.read = function (req, res) {
   var id = req.param('id');
-  var include;
-
+  
   // validate input
-  if (!id || id == "me") {
+  if (id == "me") {
     id = req.user && req.user._id;
-    include = "+email";
   }
 
-  db.User.findOne({ _id: id }).select(include).exec(function (err, user) {
-    if (err) return res.send(400, { message: "Most likely invalid id", error: err });
-    if (!user) return res.send(404, { message: "User not found", error: user });
+  // check permissions
+  if (id !== (req.user && req.user._id)) {
+    if (!req.admin) return res.send(401);
+  }
 
-    res.send(200, { payload: user });
+  db.User.findOne({ _id: id }).select('+email').exec(function (err, user) {
+    if (err) return res.send(400, { message: "Most likely invalid id", error: err });
+
+    res.send(200, user);
   });
 };
 
 
-// POST /users
+// CREATE A NEW USER
+// Route: POST /users
+// Permissions: public
 Users.create = function (req, res) {
-  if (req.user) return res.send(400, { message: "Please log out before you create a new account"});
-
-  // create
   var newUser = db.User({
     displayName: req.param('displayName'),
     email: req.param('email'),
@@ -104,12 +114,14 @@ Users.create = function (req, res) {
     if (err) return res.send(400, { message: "Validation error", error: err });
 
     console.log(user);
-    res.send(201, { payload: user });
+    res.send(201, user);
   });
 };
 
 
-// PUT /users/:id
+// UPDATE A USER
+// Route: PUT /users/:id
+// Permissions: self, admin
 Users.update = function (req, res) {
   var id = req.param('id');
 
@@ -146,13 +158,15 @@ Users.update = function (req, res) {
     user.save(function (err, user) {
       if (err) return res.send(400, { message: "Couldn't save user changes", payload: err });
       console.log("saved", user);
-      res.send(200, { payload: user });
+      res.send(200, user);
     })
   });
 };
 
 
-// DEL /users/:id
+// DELETE USER
+// Route: DEL /users/:id
+// Permissions: admin
 Users.remove = function (req, res) {
   var id = req.param('id');
 
