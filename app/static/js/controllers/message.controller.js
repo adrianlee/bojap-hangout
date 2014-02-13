@@ -3,6 +3,7 @@
 angular.module('bojap')
 .controller('Message', function ($scope, $http) {
   $scope.master = {};
+  $scope.messages = [];
 
   // Fetch Existing Messages
   $scope.fetch = function () {

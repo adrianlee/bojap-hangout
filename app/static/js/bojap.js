@@ -5,9 +5,10 @@ var app = angular.module('bojap', ['ngRoute', 'ngResource'])
 .config(function($routeProvider) {
   $routeProvider
     .when('/', { controller: 'Landing', loginRequired: false, templateUrl: 'templates/welcome.html' })
-    .when('/hangout', { controller: 'Hangout', loginRequired: true, templateUrl: 'templates/hangout.html' })
-    .when('/messages', { controller: 'Landing', loginRequired: true, templateUrl: 'templates/messages.html' })
-    .when('/profile', { controller: 'Landing', loginRequired: true, templateUrl: 'templates/profile.html' })
+    .when('/hangout', { loginRequired: true, templateUrl: 'templates/hangout.html' })
+    .when('/messages', { loginRequired: true, templateUrl: 'templates/messages.html' })
+    .when('/profile', { loginRequired: true, templateUrl: 'templates/profile.html' })
+    .when('/settings', { loginRequired: true, templateUrl: 'templates/settings.html' })
     .when('/login', { controller: 'Login', loginRequired: true, templateUrl: 'templates/login.html' })
     .when('/logout', { controller: 'Logout', loginRequired: true, templateUrl: 'templates/logout.html' })
     .otherwise({ redirectTo: '/' });

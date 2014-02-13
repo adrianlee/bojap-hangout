@@ -1,5 +1,6 @@
 <div ng-controller="Message">
   <h2>Private Messages</h2>
+  <!--
   <p><a onclick="$('#compose').toggle()" class="btn btn-default">Create</a></p>
   <form id="compose" style="display: none;">
     <input type="text" class="form-control" placeholder="Recipient" ng-model="input.recipient">
@@ -7,24 +8,15 @@
     <textarea class="form-control" rows="3" placeholder="Your Message..." ng-model="input.message"></textarea>
     <button type="button" class="btn btn-success" style="margin: .35em 0;" ng-click="send(input)">Send</button>
   </form>
+  -->
+  <h3 ng-show="messages !== []">You have no messages</h3>
   <p>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>To / From</th>
-          <th>Subject</th>
-          <th>Message</th>
-          <th>Last reply</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="message in messages">
-          <td>{{message.users}}</td>
-          <td>{{message.subject}}</td>
-          <td>{{message.messages[message.messages.length-1].message}}</td>
-          <td>{{message.messages[message.messages.length-1].timestamp | date:'MM/dd/yyyy @ h:mma'}}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div ng-repeat="message in messages">
+      <td>{{message.users}}</td>
+      <td>{{message.subject}}</td>
+      <td>{{message.messages[message.messages.length-1].message}}</td>
+      <td>{{message.messages[message.messages.length-1].timestamp | date:'MM/dd/yyyy @ h:mma'}}</td>
+    </div>
   </p>
+  {{messages}}
 </div>

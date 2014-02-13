@@ -80,11 +80,9 @@ angular.module('bojap')
       localStorage.clear();
       $http.defaults.headers.common.Authorization = null;
 
-      if (self.authenticated) {
-        self.authenticated = false;
-        return true;
-      }
-      return false; 
+      self.authenticated = false;
+      
+      return true; 
     },
     getProfile: function (cb) {
       $http({

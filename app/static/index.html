@@ -8,13 +8,11 @@
     <!-- <link href="http://fonts.googleapis.com/css?family=Lato:300,400,300italic" rel="stylesheet" type="text/css"> -->
     <!-- <link rel="stylesheet" href="css/pure.min.css"> -->
     <link rel="stylesheet" href="css/bojap.css">
-
     <link rel="stylesheet" href="css/bootstrap.min.css">
-
   </head>
 
   <body ng-controller="Main" class="ng-cloak">
-    <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <nav class="navbar navbar-default navbar-static-top navbar-inverse" role="navigation">
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -33,6 +31,7 @@
             <li><a href="#">Home</a></li>
             <li ng-show="loggedIn()"><a href="#messages">Messages</a></li>
             <li ng-show="loggedIn()"><a href="#profile">Profile</a></li>
+            <li ng-show="loggedIn()"><a href="#settings">Settings</a></li>
             <!-- <li ng-show="loggedIn()"><a href="#help">Help</a></li> -->
             <!-- <li ng-show="loggedIn()"><a href="#hangout">Hangout</a></li> -->
             <!-- <li><a href="http://blog.bojap.com/">Blog</a></li> -->
@@ -64,13 +63,14 @@
     <script type="text/javascript" src="js/services/base64.service.js"></script>
     <script type="text/javascript" src="js/services/faye.service.js"></script>
 
-    <script type="text/javascript" src="js/controllers/main.controller.js"></script>
     <script type="text/javascript" src="js/controllers/landing.controller.js"></script>
-    <script type="text/javascript" src="js/controllers/welcome.controller.js"></script>
     <script type="text/javascript" src="js/controllers/login.controller.js"></script>
     <script type="text/javascript" src="js/controllers/logout.controller.js"></script>
-    <script type="text/javascript" src="js/controllers/profile.controller.js"></script>
+    <script type="text/javascript" src="js/controllers/main.controller.js"></script>
     <script type="text/javascript" src="js/controllers/message.controller.js"></script>
+    <script type="text/javascript" src="js/controllers/profile.controller.js"></script>
+    <script type="text/javascript" src="js/controllers/settings.controller.js"></script>
+    <script type="text/javascript" src="js/controllers/welcome.controller.js"></script>
     <!-- // <script type="text/javascript" src="js/controllers/hangout.controller.js"></script> -->
   </body>
 </html>
