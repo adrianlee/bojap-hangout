@@ -72,7 +72,7 @@ Users.list = function (req, res) {
   // check permissions
   if (!req.admin) return res.send(401);
 
-  db.User.find().select('+email').exec(function (err, user) {
+  db.User.find().populate('profile').select('+email').exec(function (err, user) {
     if (err) return res.send(400, { message: "Something went wrong", error: err });
     res.send(200, user);
   });
@@ -90,6 +90,7 @@ Users.read = function (req, res) {
   // validate input
   if (id == "me") {
     id = req.user && req.user._id;
+    console.log(id);
   }
 
   // check permissions
@@ -97,9 +98,10 @@ Users.read = function (req, res) {
     if (!req.admin) return res.send(401);
   }
 
-  db.User.findOne({ _id: id }).select('+email').exec(function (err, user) {
+  db.User.findOne({ _id: id }).populate('profile').select('+email').exec(function (err, user) {
     if (err) return res.send(400, { message: "Most likely invalid id", error: err });
 
+    console.log(user);
     res.send(200, user);
   });
 };
@@ -109,17 +111,23 @@ Users.read = function (req, res) {
 // Route: POST /users
 // Permissions: public
 Users.create = function (req, res) {
-  var newUser = db.User({
+  var newUser = new db.User({
     displayName: req.param('displayName'),
     email: req.param('email'),
     password: req.param('password') 
   });
 
-  newUser.save(function (err, user) {
-    if (err) return res.send(400, { message: "Validation error", error: err });
+  var newProfile = new db.Profile({ user: newUser });
 
-    console.log(user);
-    res.send(201, user);
+
+
+  newUser.save(function (err, user) {
+    if (err) return res.send(400, { message: "Save Error", error: err });
+
+    newProfile.save();
+
+    user.password = undefined;
+    res.send(201, user); 
   });
 };
 

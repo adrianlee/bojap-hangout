@@ -10,12 +10,14 @@ angular.module('bojap')
     if (!input) return false;
     if (!input.email || !input.password) return alert("Enter a valid email and password ");
 
-    accountService.loginWithPassword(input.email, input.password, function (err, result) {
-      if (err) return alert(err.message);
+    accountService.loginWithPassword(input.email, input.password)
+    .then(function (result) {
       console.log("Logged in:", result);
       
       // redirect to welcome page
       $location.path('/welcome');
+    }, function (err) {
+      console.log(err);
     });
   };
 

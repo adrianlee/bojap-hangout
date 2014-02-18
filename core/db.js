@@ -33,12 +33,14 @@ var UserSchema = new mongoose.Schema({
   email: { type: String, select: false, required: true, unique: true },
   google:  { type: GoogleProviderSchema, select: false },
   password: { type: String, select: false, required: true },
-  updated_at: { type: Date, default: Date.now },
-  created_at: { type: Date, default: Date.now }
+  _updated_at: { type: Date, default: Date.now },
+  _created_at: { type: Date, default: Date.now }
 });
 
 UserSchema.pre('save', function(next) {
   var user = this;
+
+  this.updated_at = new Date;
 
   // only hash the password if it has been modified (or is new)
   if (!user.isModified('password')) return next();
@@ -78,8 +80,21 @@ var MessageSchema = new mongoose.Schema({
   ]
 });
 
+
+var ProfileSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, rel: 'User' },
+  _updated_at: { type: Date, default: Date.now },
+  _created_at: { type: Date, default: Date.now }
+});
+
+ProfileSchema.pre('save', function (next) {
+  this.updated_at = new Date;
+  next();
+});
+
 // Models
 db.User = mongoose.model('User', UserSchema);
 db.Message = mongoose.model('Message', MessageSchema);
+db.Profile = mongoose.model('Profile', ProfileSchema);
 
 module.exports = db;

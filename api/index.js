@@ -7,12 +7,12 @@ var server = module.exports = require('http').createServer(api);
 var when = require('when');
 
 var hangout = require('./hangout');
-var messages = require('./messages');
 var middleware = require('./middleware');
 var faye = require('./faye')(server);
 
 var Users = require('./Users');
 var Profiles = require('./Profiles');
+var Messages = require('./Messages');
 
 /*
  * Middleware
@@ -58,18 +58,18 @@ api.put('/users/:id', middleware.auth, Users.update); // Update user information
 api.del('/users/:id', middleware.auth, Users.remove); // Delete a user
 
 // Profile Resource
-api.post('/profiles', middleware.auth, Profiles.create); // Create a new profile
-api.get('/profiles', middleware.auth, Profiles.list); // List profiles
-api.get('/profiles/:id', middleware.auth, Profiles.read); // Get a profile
+api.post('/profiles', Profiles.create); // Create a new profile
+api.get('/profiles', Profiles.list); // List profiles
+api.get('/profiles/:id', Profiles.read); // Get a profile
 api.put('/profiles/:id', middleware.auth, Profiles.update); // Update a profile
 api.del('/profiles/:id', middleware.auth, Profiles.remove); // Delete a profile
 
 // Messages Resource
-api.post('/messages', middleware.auth, messages.create); // Send a message
-api.get('/messages', middleware.auth, messages.list); // List messages
-api.get('/messages/:id', middleware.auth, messages.read); // Get a message
-api.put('/messages/:id', middleware.auth, messages.update); // Edit a message
-api.del('/messages/:id', middleware.auth, messages.remove); // Delete a message
+api.post('/messages', middleware.auth, Messages.create); // Send a message
+api.get('/messages', middleware.auth, Messages.list); // List messages
+api.get('/messages/:id', middleware.auth, Messages.read); // Get a message
+api.put('/messages/:id', middleware.auth, Messages.update); // Edit a message
+api.del('/messages/:id', middleware.auth, Messages.remove); // Delete a message
 
 // Hangout
 // api.get('/rooms', hangout.rooms.get);

@@ -5,8 +5,7 @@ angular.module('bojap')
   // async fetch new profile. use existing profile temporarily
   $scope.input = $rootScope.profile || {};
   
-  accountService.getProfile(function (err, profile) {
-    if (err) return false;
+  accountService.getProfile().then(function (profile) {
     $rootScope.profile = profile;
     $scope.input = profile;
   });

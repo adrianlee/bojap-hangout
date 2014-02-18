@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bojap')
-.factory('accountService', function($http, Base64) {
+.factory('accountService', function($q, $http, Base64) {
   var self = this;
 
   this.authenticated = false;
@@ -51,26 +51,30 @@ angular.module('bojap')
 
       return true;
     },
-    loginWithPassword: function (email, password, cb) {
+    loginWithPassword: function (email, password) {
       var that = this;
+
+      var deferred = $q.defer();
+
       $http({
-        method: 'POST',
-        url: 'http://api.bojap.dev/user.login',
-        data: {
+        method: 'GET',
+        url: 'http://api.bojap.dev/login',
+        params: {
           email: email,
           password: password
         }
-      }).
-      success(function(data, status, headers, config) {
-        if (data.error) {
-          return cb(data);
-        }
-
+      })
+      .success(function(data, status, headers, config) {
         setToken(data.token);
         setProfile(data.payload);
-
-        cb(null, data);
+        
+        deferred.resolve(data);
+      })
+      .error(function (data, status, headers, config) {
+        deferred.reject(data);
       });
+
+      return deferred.promise;
     },
     logout: function () {
       self.token = null;
@@ -84,18 +88,22 @@ angular.module('bojap')
       
       return true; 
     },
-    getProfile: function (cb) {
+    getProfile: function () {
+      var deferred = $q.defer();
+
       $http({
-        method: 'POST',
-        url: 'http://api.bojap.dev/user.get',
-        data: {
-          id: 'me'
-        }
+        method: 'GET',
+        url: 'http://api.bojap.dev/users/me'
       }).
       success(function(data, status, headers, config) {
-        self.profile = data.payload;
-        cb(data.error ? data : null, data.payload);
+        self.profile = data;
+        deferred.resolve(data);
+      }).
+      error(function(data, status, header, config) {
+        deffered.reject(data);
       });
+
+      return deferred.promise;
     }
   }
 });
